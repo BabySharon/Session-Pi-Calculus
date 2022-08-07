@@ -1,16 +1,20 @@
-//TODO adding relational operators
+//TODO
+// adding relational operators
 // add other pi syntaxes
+// more processes as input
+// Assigning processes
+
 grammar sessionPi;
 
 process:
-     '(' process SEQ process ')'            #sequentialProcess
-    | process PARALLEL process              # parallel
-    | NULL                                  # inaction
+      CAPS'[' process ']' (SEQ process)?         #sequentialProcess
     | scopeRestrict process                 # scopeRestriction
     | send SEQ process                      # sendProcess
     | receive SEQ process                   # receiveProcess
+    | process PARALLEL process              # parallel
 // Session processes
     | scopeSession process                  # scopeSessionLabel
+    | NULL                                  # inaction
     ;
 
 scopeRestrict: NEW c=CHANNEL;
@@ -20,9 +24,9 @@ send: channel=CHANNEL '!<' payload '>';
 receive: channel=CHANNEL '?(' payload ')';
 
 payload:
-      CHANNEL                             # channelPayload
-    | values                              # stringPayload
-    | expr                                # exprPayload
+    expr                                    # exprPayload
+    |values                                 # stringPayload
+    | CHANNEL                               # channelPayload
     ;
 
 
@@ -54,7 +58,9 @@ NULL: '0';
 PARALLEL: '|';
 SEQ: '.';
 NEW: 'new';
-CHANNEL: [a-zA-Z]{1};
+CHANNEL: [a-z]{1};
 INT: [0-9]+;
 STRING: '"'(.)*?'"' ; // . matches any character except line breaks
 FLOAT: [0-9]+'.'[0-9]+;
+CAPS: [A-Z]{1};
+WS : [ \t\r\n]+ -> skip ;
