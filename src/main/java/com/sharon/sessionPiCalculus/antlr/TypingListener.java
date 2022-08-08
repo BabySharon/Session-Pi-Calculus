@@ -7,7 +7,6 @@ import java.util.Map;
 public class TypingListener extends sessionPiBaseListener{
     sessionPiParser parser;
     private Map<String, String> typingContext = DropwizardApplication.tc1;
-    private Map<String, String> sessionType = DropwizardApplication.sessionType;
 
     public TypingListener(sessionPiParser parser) {
         this.parser = parser;

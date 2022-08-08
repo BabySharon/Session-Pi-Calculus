@@ -7,7 +7,7 @@
 grammar sessionPi;
 
 process:
-      CAPS'[' process ']' (SEQ process)?         #sequentialProcess
+      CAPS'[' process ']' (SEQ process)?    #sequentialProcess
     | scopeRestrict process                 # scopeRestriction
     | send SEQ process                      # sendProcess
     | receive SEQ process                   # receiveProcess
