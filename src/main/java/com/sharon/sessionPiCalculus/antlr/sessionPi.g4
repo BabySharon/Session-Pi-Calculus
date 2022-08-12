@@ -4,33 +4,34 @@
 // more processes as input
 // Assigning processes
 
+
 grammar sessionPi;
 
 process:
-      CAPS'[' process ']' (SEQ process)?    #sequentialProcess
+      CAPS'[' process (SEQ process)* ']'    # sequentialProcess
     | scopeRestrict process                 # scopeRestriction
-    | send SEQ process                      # sendProcess
-    | receive SEQ process                   # receiveProcess
+    | send                                  # sendProcess
+    | receive                               # receiveProcess
     | process PARALLEL process              # parallel
 // Session processes
     | scopeSession process                  # scopeSessionLabel
     | NULL                                  # inaction
     ;
 
-scopeRestrict: NEW c=CHANNEL;
+scopeRestrict: NEW c=VAR;
 
-send: channel=CHANNEL '!<' payload '>';
+send: channel=VAR '<' payload '>';
 
-receive: channel=CHANNEL '?(' payload ')';
+receive: channel=VAR '(' payload ')';
 
 payload:
     expr                                    # exprPayload
     |values                                 # stringPayload
-    | CHANNEL                               # channelPayload
+    | VAR                                   # channelPayload
     ;
 
 
-scopeSession: NEW x=CHANNEL y=CHANNEL;
+scopeSession: NEW x=VAR y=VAR;
 
 expr:
       expr op=('*'|'/') expr
@@ -58,7 +59,7 @@ NULL: '0';
 PARALLEL: '|';
 SEQ: '.';
 NEW: 'new';
-CHANNEL: [a-z]{1};
+VAR: [a-z]{1};
 INT: [0-9]+;
 STRING: '"'(.)*?'"' ; // . matches any character except line breaks
 FLOAT: [0-9]+'.'[0-9]+;
