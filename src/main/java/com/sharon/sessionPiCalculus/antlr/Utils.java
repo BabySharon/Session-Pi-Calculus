@@ -1,15 +1,12 @@
 package com.sharon.sessionPiCalculus.antlr;
 
-import com.sharon.sessionPiCalculus.Message;
+import com.sharon.sessionPiCalculus.dao.Message;
 import com.sharon.sessionPiCalculus.dao.InputDao;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import javax.swing.text.SimpleAttributeSet;
 import java.util.*;
 //TODO Check duality
 //TODO Implement session type as queue
