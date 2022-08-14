@@ -23,7 +23,7 @@ public class SessionPiResource {
         try {
 //            System.out.println(input.getInput());
 //            System.out.println(input.getProcessList().get(0).getTypingContextList().get("y"));
-            InputDao.sessionVariableObjects = input.getSessionVariables();
+//            InputDao.sessionVariableObjects = input.getSessionVariables();
             ParseTree tree = Utils.createVisitor(input.getInput(), input, null);
 
         }

@@ -11,17 +11,11 @@ import java.util.Map;
 public class InputDao {
     private String input;
     List<ProcessDao> processList;
-    private Map<String, String> sessionVariables;
 
     @JsonIgnore
     public static Map<String, String> sessionVariableObjects = new HashMap<>();
 
     public InputDao() {
-    }
-
-    @JsonProperty
-    public Map<String, String> getSessionVariables() {
-        return sessionVariables;
     }
 
     @JsonProperty
@@ -42,4 +36,11 @@ public class InputDao {
         return allTypingContexts;
     }
 
+    public Map<String, List<String>> getAllSessionTypes() {
+        Map<String, List<String>> allSessionTypes = new HashMap<>();
+        for (ProcessDao processDao: processList ) {
+            allSessionTypes.put(processDao.getName(), processDao.getSessionType());
+        }
+        return allSessionTypes;
+    }
 }
