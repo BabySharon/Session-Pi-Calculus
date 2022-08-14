@@ -1,1 +1,1 @@
-new x y  P[x(TRUE).x(b).0] | Q[ y(a).y<TRUE>.0]
+new x y  P[x!<1>.0] | Q[ y?(a).0]

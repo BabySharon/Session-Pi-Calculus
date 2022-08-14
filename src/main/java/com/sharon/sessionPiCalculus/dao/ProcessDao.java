@@ -1,14 +1,15 @@
 package com.sharon.sessionPiCalculus.dao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
 public class ProcessDao {
     private String name;
     private String coVariable;
-    //TODO co variable field may be removed as that information in present in parse tree
-    private Map<String, String> typingContextMap;
+    private TypingContext typingContext;
 
     public ProcessDao() {
     }
@@ -17,7 +18,6 @@ public class ProcessDao {
     public String getName() {
         return name;
     }
-
     @JsonProperty
     public void setName(String name) {
         this.name = name;
@@ -33,19 +33,19 @@ public class ProcessDao {
     }
 
     @JsonProperty
-    public Map<String, String> getTypingContextMap() {
-        return typingContextMap;
+    public TypingContext getTypingContext() {
+        return typingContext;
     }
 
     @JsonProperty
-    public void setTypingContextMap(Map<String, String> typingContextMap) {
-        this.typingContextMap = typingContextMap;
+    public void setTypingContext(TypingContext typingContext) {
+        this.typingContext = typingContext;
     }
 
-    public ProcessDao(String name, String coVariable, Map<String, String> typingContextMap) {
+    public ProcessDao(String name, String coVariable, TypingContext typingContext) {
         this.name = name;
         this.coVariable = coVariable;
-        this.typingContextMap = typingContextMap;
+        this.typingContext = typingContext;
     }
 
 }

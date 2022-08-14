@@ -1,27 +1,21 @@
 package com.sharon.sessionPiCalculus.dao;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InputDao {
     private String input;
     List<ProcessDao> processList;
-    private Map<String, String> sessionVariables;
 
-    @JsonIgnore
-    public static Map<String, String> sessionVariableObjects = new HashMap<>();
-
-    public InputDao() {
+    public InputDao(String input, List<ProcessDao> processList) throws JsonProcessingException {
+        this.input = input;
+        this.processList = processList;
     }
 
-    @JsonProperty
-    public Map<String, String> getSessionVariables() {
-        return sessionVariables;
+    public InputDao() {
     }
 
     @JsonProperty
@@ -32,14 +26,6 @@ public class InputDao {
     @JsonProperty
     public List<ProcessDao> getProcessList() {
         return processList;
-    }
-
-    public  Map<String, Map<String, String>> getAllTypingContexts(){
-        Map<String, Map<String, String>> allTypingContexts = new HashMap();
-        for (ProcessDao p: processList) {
-            allTypingContexts.put(p.getName(), p.getTypingContextMap());
-        }
-        return allTypingContexts;
     }
 
 }
