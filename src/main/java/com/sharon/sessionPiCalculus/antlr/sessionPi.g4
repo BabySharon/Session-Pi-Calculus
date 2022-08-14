@@ -8,14 +8,15 @@
 grammar sessionPi;
 
 process:
-      CAPS'[' process (SEQ process)* ']'    # sequentialProcess
-    | scopeRestrict process                 # scopeRestriction
-    | send                                  # sendProcess
-    | receive                               # receiveProcess
-    | process PARALLEL process              # parallel
-// Session processes
-    | scopeSession process                  # scopeSessionLabel
-    | NULL                                  # inaction
+      CAPS'[' process (SEQ process)* ']'                                # sequentialProcess
+    | scopeRestrict process                                             # scopeRestriction
+    | send                                                              # sendProcess
+    | receive                                                           # receiveProcess
+    | VAR SELECT STRING SEQ process                                     # selectProcess
+    | VAR BRANCH '{' (STRING ':' process ',')* STRING ':' process '}'   # branchProcess
+    | process PARALLEL process                                          # parallel
+    | scopeSession process                                              # scopeSessionLabel
+    | NULL                                                              # inaction
     ;
 
 scopeRestrict: NEW c=VAR;
@@ -57,6 +58,8 @@ values:
 // Lexer Rules
 NULL: '0';
 PARALLEL: '|';
+SELECT: 'select';
+BRANCH:'branch';
 SEQ: '.';
 NEW: 'new';
 VAR: [a-z]{1};

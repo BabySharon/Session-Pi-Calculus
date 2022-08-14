@@ -1,5 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -53,12 +52,26 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSequentialProcess(sessionPiParser.SequentialProcessContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code branchProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBranchProcess(sessionPiParser.BranchProcessContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code sendProcess}
 	 * labeled alternative in {@link sessionPiParser#process}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSendProcess(sessionPiParser.SendProcessContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code selectProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelectProcess(sessionPiParser.SelectProcessContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link sessionPiParser#scopeRestrict}.
 	 * @param ctx the parse tree
@@ -97,13 +110,13 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVarPayload(sessionPiParser.VarPayloadContext ctx);
+	T visitChannelPayload(sessionPiParser.ChannelPayloadContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link sessionPiParser#scopeSession}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitScopeSession(sessionPiParser.ScopeSessionContext ctx) throws Exception;
+	T visitScopeSession(sessionPiParser.ScopeSessionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link sessionPiParser#expr}.
 	 * @param ctx the parse tree
@@ -118,7 +131,7 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBool(sessionPiParser.BoolContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code values}
-	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
+	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

@@ -1,6 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
-
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -19,8 +17,9 @@ public class sessionPiParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, NULL=16, PARALLEL=17, 
-		SEQ=18, NEW=19, VAR=20, INT=21, STRING=22, FLOAT=23, CAPS=24, WS=25;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, T__18=19, NULL=20, PARALLEL=21, SELECT=22, BRANCH=23, SEQ=24, 
+		NEW=25, VAR=26, INT=27, STRING=28, FLOAT=29, CAPS=30, WS=31;
 	public static final int
 		RULE_process = 0, RULE_scopeRestrict = 1, RULE_send = 2, RULE_receive = 3, 
 		RULE_payload = 4, RULE_scopeSession = 5, RULE_expr = 6, RULE_bool = 7, 
@@ -35,17 +34,17 @@ public class sessionPiParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'['", "']'", "'<'", "'>'", "'('", "')'", "'*'", "'/'", "'+'", 
-			"'-'", "'=='", "'TRUE'", "'FALSE'", "'true'", "'false'", "'0'", "'|'", 
-			"'.'", "'new'"
+			null, "'['", "']'", "'{'", "':'", "','", "'}'", "'<'", "'>'", "'('", 
+			"')'", "'*'", "'/'", "'+'", "'-'", "'=='", "'TRUE'", "'FALSE'", "'true'", 
+			"'false'", "'0'", "'|'", "'select'", "'branch'", "'.'", "'new'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, "NULL", "PARALLEL", "SEQ", "NEW", "VAR",
-			"INT", "STRING", "FLOAT", "CAPS", "WS"
+			null, null, null, null, null, null, null, null, "NULL", "PARALLEL", "SELECT", 
+			"BRANCH", "SEQ", "NEW", "VAR", "INT", "STRING", "FLOAT", "CAPS", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -118,12 +117,6 @@ public class sessionPiParser extends Parser {
 			return getRuleContext(ProcessContext.class,0);
 		}
 		public ScopeSessionLabelContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "ScopeSessionLabelContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterScopeSessionLabel(this);
@@ -132,16 +125,15 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitScopeSessionLabel(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeSessionLabel(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class InactionContext extends ProcessContext {
 		public TerminalNode NULL() { return getToken(sessionPiParser.NULL, 0); }
 		public InactionContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "InactionContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterInaction(this);
@@ -150,18 +142,17 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitInaction(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitInaction(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class ReceiveProcessContext extends ProcessContext {
 		public ReceiveContext receive() {
 			return getRuleContext(ReceiveContext.class,0);
 		}
 		public ReceiveProcessContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "ReceiveProcessContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterReceiveProcess(this);
@@ -169,6 +160,11 @@ public class sessionPiParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitReceiveProcess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitReceiveProcess(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ParallelContext extends ProcessContext {
@@ -180,12 +176,6 @@ public class sessionPiParser extends Parser {
 		}
 		public TerminalNode PARALLEL() { return getToken(sessionPiParser.PARALLEL, 0); }
 		public ParallelContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "ParallelContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterParallel(this);
@@ -194,14 +184,10 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitParallel(this);
 		}
-
-		public List<String> getProcessNames(){
-			List<String> names = new ArrayList<>();
-			for (ProcessContext context:process()) {
-				if(context.toString().equals("SequentialProcessContext"))
-					names.add(((SequentialProcessContext)context).CAPS().getText());
-			}
-			return names;
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitParallel(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ScopeRestrictionContext extends ProcessContext {
@@ -212,12 +198,6 @@ public class sessionPiParser extends Parser {
 			return getRuleContext(ProcessContext.class,0);
 		}
 		public ScopeRestrictionContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "ScopeRestrictionContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterScopeRestriction(this);
@@ -226,13 +206,13 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitScopeRestriction(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeRestriction(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class SequentialProcessContext extends ProcessContext {
-		@Override
-		public String toString() {
-			return "SequentialProcessContext";
-		}
-
 		public TerminalNode CAPS() { return getToken(sessionPiParser.CAPS, 0); }
 		public List<ProcessContext> process() {
 			return getRuleContexts(ProcessContext.class);
@@ -253,18 +233,45 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitSequentialProcess(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSequentialProcess(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BranchProcessContext extends ProcessContext {
+		public TerminalNode VAR() { return getToken(sessionPiParser.VAR, 0); }
+		public TerminalNode BRANCH() { return getToken(sessionPiParser.BRANCH, 0); }
+		public List<TerminalNode> STRING() { return getTokens(sessionPiParser.STRING); }
+		public TerminalNode STRING(int i) {
+			return getToken(sessionPiParser.STRING, i);
+		}
+		public List<ProcessContext> process() {
+			return getRuleContexts(ProcessContext.class);
+		}
+		public ProcessContext process(int i) {
+			return getRuleContext(ProcessContext.class,i);
+		}
+		public BranchProcessContext(ProcessContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterBranchProcess(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitBranchProcess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitBranchProcess(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class SendProcessContext extends ProcessContext {
 		public SendContext send() {
 			return getRuleContext(SendContext.class,0);
 		}
 		public SendProcessContext(ProcessContext ctx) { copyFrom(ctx); }
-
-		@Override
-		public String toString() {
-			return "SendProcessContext";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterSendProcess(this);
@@ -272,6 +279,34 @@ public class sessionPiParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitSendProcess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSendProcess(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class SelectProcessContext extends ProcessContext {
+		public TerminalNode VAR() { return getToken(sessionPiParser.VAR, 0); }
+		public TerminalNode SELECT() { return getToken(sessionPiParser.SELECT, 0); }
+		public TerminalNode STRING() { return getToken(sessionPiParser.STRING, 0); }
+		public TerminalNode SEQ() { return getToken(sessionPiParser.SEQ, 0); }
+		public ProcessContext process() {
+			return getRuleContext(ProcessContext.class,0);
+		}
+		public SelectProcessContext(ProcessContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterSelectProcess(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitSelectProcess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSelectProcess(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -291,9 +326,9 @@ public class sessionPiParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(40);
+			setState(63);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				{
 				_localctx = new SequentialProcessContext(_localctx);
@@ -334,7 +369,7 @@ public class sessionPiParser extends Parser {
 				setState(31);
 				scopeRestrict();
 				setState(32);
-				process(6);
+				process(8);
 				}
 				break;
 			case 3:
@@ -357,29 +392,89 @@ public class sessionPiParser extends Parser {
 				break;
 			case 5:
 				{
-				_localctx = new ScopeSessionLabelContext(_localctx);
+				_localctx = new SelectProcessContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(36);
-				scopeSession();
+				match(VAR);
 				setState(37);
-				process(2);
+				match(SELECT);
+				setState(38);
+				match(STRING);
+				setState(39);
+				match(SEQ);
+				setState(40);
+				process(5);
 				}
 				break;
 			case 6:
 				{
+				_localctx = new BranchProcessContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(41);
+				match(VAR);
+				setState(42);
+				match(BRANCH);
+				setState(43);
+				match(T__2);
+				setState(51);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(44);
+						match(STRING);
+						setState(45);
+						match(T__3);
+						setState(46);
+						process(0);
+						setState(47);
+						match(T__4);
+						}
+						} 
+					}
+					setState(53);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
+				}
+				setState(54);
+				match(STRING);
+				setState(55);
+				match(T__3);
+				setState(56);
+				process(0);
+				setState(57);
+				match(T__5);
+				}
+				break;
+			case 7:
+				{
+				_localctx = new ScopeSessionLabelContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(59);
+				scopeSession();
+				setState(60);
+				process(2);
+				}
+				break;
+			case 8:
+				{
 				_localctx = new InactionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(39);
+				setState(62);
 				match(NULL);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(47);
+			setState(70);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
@@ -388,18 +483,18 @@ public class sessionPiParser extends Parser {
 					{
 					_localctx = new ParallelContext(new ProcessContext(_parentctx, _parentState));
 					pushNewRecursionContext(_localctx, _startState, RULE_process);
-					setState(42);
+					setState(65);
 					if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-					setState(43);
+					setState(66);
 					match(PARALLEL);
-					setState(44);
+					setState(67);
 					process(4);
 					}
 					} 
 				}
-				setState(49);
+				setState(72);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			}
 			}
 		}
@@ -421,12 +516,6 @@ public class sessionPiParser extends Parser {
 		public ScopeRestrictContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-
-		@Override
-		public String toString() {
-			return "ScopeRestrictContext";
-		}
-
 		@Override public int getRuleIndex() { return RULE_scopeRestrict; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -436,6 +525,11 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitScopeRestrict(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeRestrict(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ScopeRestrictContext scopeRestrict() throws RecognitionException {
@@ -444,9 +538,9 @@ public class sessionPiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(50);
+			setState(73);
 			match(NEW);
-			setState(51);
+			setState(74);
 			((ScopeRestrictContext)_localctx).c = match(VAR);
 			}
 		}
@@ -462,7 +556,7 @@ public class sessionPiParser extends Parser {
 	}
 
 	public static class SendContext extends ParserRuleContext {
-		public Token VAR;
+		public Token channel;
 		public PayloadContext payload() {
 			return getRuleContext(PayloadContext.class,0);
 		}
@@ -470,12 +564,6 @@ public class sessionPiParser extends Parser {
 		public SendContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-
-		@Override
-		public String toString() {
-			return "SendContext";
-		}
-
 		@Override public int getRuleIndex() { return RULE_send; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -485,6 +573,11 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitSend(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSend(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final SendContext send() throws RecognitionException {
@@ -493,14 +586,14 @@ public class sessionPiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
-			((SendContext)_localctx).VAR = match(VAR);
-			setState(54);
-			match(T__2);
-			setState(55);
+			setState(76);
+			((SendContext)_localctx).channel = match(VAR);
+			setState(77);
+			match(T__6);
+			setState(78);
 			payload();
-			setState(56);
-			match(T__3);
+			setState(79);
+			match(T__7);
 			}
 		}
 		catch (RecognitionException re) {
@@ -515,7 +608,7 @@ public class sessionPiParser extends Parser {
 	}
 
 	public static class ReceiveContext extends ParserRuleContext {
-		public Token VAR;
+		public Token channel;
 		public PayloadContext payload() {
 			return getRuleContext(PayloadContext.class,0);
 		}
@@ -523,12 +616,6 @@ public class sessionPiParser extends Parser {
 		public ReceiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-
-		@Override
-		public String toString() {
-			return "ReceiveContext";
-		}
-
 		@Override public int getRuleIndex() { return RULE_receive; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -538,6 +625,11 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitReceive(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitReceive(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ReceiveContext receive() throws RecognitionException {
@@ -546,14 +638,14 @@ public class sessionPiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
-			((ReceiveContext)_localctx).VAR = match(VAR);
-			setState(59);
-			match(T__4);
-			setState(60);
+			setState(81);
+			((ReceiveContext)_localctx).channel = match(VAR);
+			setState(82);
+			match(T__8);
+			setState(83);
 			payload();
-			setState(61);
-			match(T__5);
+			setState(84);
+			match(T__9);
 			}
 		}
 		catch (RecognitionException re) {
@@ -572,12 +664,7 @@ public class sessionPiParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_payload; }
-
-		@Override
-		public String toString() {
-			return "PayloadContext";
-		}
-
+	 
 		public PayloadContext() { }
 		public void copyFrom(PayloadContext ctx) {
 			super.copyFrom(ctx);
@@ -592,15 +679,14 @@ public class sessionPiParser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterStringPayload(this);
 		}
-
-		@Override
-		public String toString() {
-			return "StringPayloadContext{}";
-		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitStringPayload(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitStringPayload(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ExprPayloadContext extends PayloadContext {
@@ -612,33 +698,31 @@ public class sessionPiParser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterExprPayload(this);
 		}
-
-		@Override
-		public String toString() {
-			return "ExprPayloadContext";
-		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitExprPayload(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitExprPayload(this);
+			else return visitor.visitChildren(this);
+		}
 	}
-	public static class VarPayloadContext extends PayloadContext {
+	public static class ChannelPayloadContext extends PayloadContext {
 		public TerminalNode VAR() { return getToken(sessionPiParser.VAR, 0); }
-		public VarPayloadContext(PayloadContext ctx) { copyFrom(ctx); }
+		public ChannelPayloadContext(PayloadContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterVarPayload(this);
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterChannelPayload(this);
 		}
-
-		@Override
-		public String toString() {
-			return "VAR";
-		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitVarPayload(this);
+			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitChannelPayload(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitChannelPayload(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -646,14 +730,14 @@ public class sessionPiParser extends Parser {
 		PayloadContext _localctx = new PayloadContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_payload);
 		try {
-			setState(66);
+			setState(89);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				_localctx = new ExprPayloadContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(63);
+				setState(86);
 				expr(0);
 				}
 				break;
@@ -661,15 +745,15 @@ public class sessionPiParser extends Parser {
 				_localctx = new StringPayloadContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(64);
+				setState(87);
 				values();
 				}
 				break;
 			case 3:
-				_localctx = new VarPayloadContext(_localctx);
+				_localctx = new ChannelPayloadContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(65);
+				setState(88);
 				match(VAR);
 				}
 				break;
@@ -702,15 +786,14 @@ public class sessionPiParser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterScopeSession(this);
 		}
-
-		@Override
-		public String toString() {
-			return "ScopeSessionContext";
-		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitScopeSession(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeSession(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -720,11 +803,11 @@ public class sessionPiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(68);
+			setState(91);
 			match(NEW);
-			setState(69);
+			setState(92);
 			((ScopeSessionContext)_localctx).x = match(VAR);
-			setState(70);
+			setState(93);
 			((ScopeSessionContext)_localctx).y = match(VAR);
 			}
 		}
@@ -741,12 +824,6 @@ public class sessionPiParser extends Parser {
 
 	public static class ExprContext extends ParserRuleContext {
 		public Token op;
-
-		@Override
-		public String toString() {
-			return "ExprContext";
-		}
-
 		public TerminalNode INT() { return getToken(sessionPiParser.INT, 0); }
 		public BoolContext bool() {
 			return getRuleContext(BoolContext.class,0);
@@ -769,6 +846,11 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitExpr(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitExpr(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {
@@ -787,21 +869,21 @@ public class sessionPiParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75);
+			setState(98);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				{
-				setState(73);
+				setState(96);
 				match(INT);
 				}
 				break;
-			case T__11:
-			case T__12:
-			case T__13:
-			case T__14:
+			case T__15:
+			case T__16:
+			case T__17:
+			case T__18:
 				{
-				setState(74);
+				setState(97);
 				bool();
 				}
 				break;
@@ -809,27 +891,27 @@ public class sessionPiParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(88);
+			setState(111);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(86);
+					setState(109);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(77);
+						setState(100);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(78);
+						setState(101);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__6 || _la==T__7) ) {
+						if ( !(_la==T__10 || _la==T__11) ) {
 							((ExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -837,7 +919,7 @@ public class sessionPiParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(79);
+						setState(102);
 						expr(6);
 						}
 						break;
@@ -845,12 +927,12 @@ public class sessionPiParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(80);
+						setState(103);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(81);
+						setState(104);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__8 || _la==T__9) ) {
+						if ( !(_la==T__12 || _la==T__13) ) {
 							((ExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -858,7 +940,7 @@ public class sessionPiParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(82);
+						setState(105);
 						expr(5);
 						}
 						break;
@@ -866,20 +948,20 @@ public class sessionPiParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(83);
+						setState(106);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(84);
-						((ExprContext)_localctx).op = match(T__10);
-						setState(85);
+						setState(107);
+						((ExprContext)_localctx).op = match(T__14);
+						setState(108);
 						expr(4);
 						}
 						break;
 					}
 					} 
 				}
-				setState(90);
+				setState(113);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
 			}
 		}
@@ -903,15 +985,14 @@ public class sessionPiParser extends Parser {
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterBool(this);
 		}
-
-		@Override
-		public String toString() {
-			return "BoolContext{}";
-		}
-
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitBool(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitBool(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -922,9 +1003,9 @@ public class sessionPiParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91);
+			setState(114);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -956,12 +1037,6 @@ public class sessionPiParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_values; }
-
-		@Override
-		public String toString() {
-			return "ValuesContext{}";
-		}
-
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).enterValues(this);
@@ -970,43 +1045,48 @@ public class sessionPiParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof sessionPiListener ) ((sessionPiListener)listener).exitValues(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitValues(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ValuesContext values() throws RecognitionException {
 		ValuesContext _localctx = new ValuesContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_values);
 		try {
-			setState(97);
+			setState(120);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(93);
+				setState(116);
 				match(INT);
 				}
 				break;
 			case FLOAT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(94);
+				setState(117);
 				match(FLOAT);
 				}
 				break;
 			case STRING:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(95);
+				setState(118);
 				match(STRING);
 				}
 				break;
-			case T__11:
-			case T__12:
-			case T__13:
-			case T__14:
+			case T__15:
+			case T__16:
+			case T__17:
+			case T__18:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(96);
+				setState(119);
 				bool();
 				}
 				break;
@@ -1054,32 +1134,37 @@ public class sessionPiParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\33f\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\2"+
-		"\3\2\3\2\3\2\7\2\33\n\2\f\2\16\2\36\13\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3"+
-		"\2\3\2\3\2\3\2\5\2+\n\2\3\2\3\2\3\2\7\2\60\n\2\f\2\16\2\63\13\2\3\3\3"+
-		"\3\3\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\5\6E\n\6\3"+
-		"\7\3\7\3\7\3\7\3\b\3\b\3\b\5\bN\n\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3"+
-		"\b\7\bY\n\b\f\b\16\b\\\13\b\3\t\3\t\3\n\3\n\3\n\3\n\5\nd\n\n\3\n\2\4\2"+
-		"\16\13\2\4\6\b\n\f\16\20\22\2\5\3\2\t\n\3\2\13\f\3\2\16\21\2l\2*\3\2\2"+
-		"\2\4\64\3\2\2\2\6\67\3\2\2\2\b<\3\2\2\2\nD\3\2\2\2\fF\3\2\2\2\16M\3\2"+
-		"\2\2\20]\3\2\2\2\22c\3\2\2\2\24\25\b\2\1\2\25\26\7\32\2\2\26\27\7\3\2"+
-		"\2\27\34\5\2\2\2\30\31\7\24\2\2\31\33\5\2\2\2\32\30\3\2\2\2\33\36\3\2"+
-		"\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\37\3\2\2\2\36\34\3\2\2\2\37 \7\4\2"+
-		"\2 +\3\2\2\2!\"\5\4\3\2\"#\5\2\2\b#+\3\2\2\2$+\5\6\4\2%+\5\b\5\2&\'\5"+
-		"\f\7\2\'(\5\2\2\4(+\3\2\2\2)+\7\22\2\2*\24\3\2\2\2*!\3\2\2\2*$\3\2\2\2"+
-		"*%\3\2\2\2*&\3\2\2\2*)\3\2\2\2+\61\3\2\2\2,-\f\5\2\2-.\7\23\2\2.\60\5"+
-		"\2\2\6/,\3\2\2\2\60\63\3\2\2\2\61/\3\2\2\2\61\62\3\2\2\2\62\3\3\2\2\2"+
-		"\63\61\3\2\2\2\64\65\7\25\2\2\65\66\7\26\2\2\66\5\3\2\2\2\678\7\26\2\2"+
-		"89\7\5\2\29:\5\n\6\2:;\7\6\2\2;\7\3\2\2\2<=\7\26\2\2=>\7\7\2\2>?\5\n\6"+
-		"\2?@\7\b\2\2@\t\3\2\2\2AE\5\16\b\2BE\5\22\n\2CE\7\26\2\2DA\3\2\2\2DB\3"+
-		"\2\2\2DC\3\2\2\2E\13\3\2\2\2FG\7\25\2\2GH\7\26\2\2HI\7\26\2\2I\r\3\2\2"+
-		"\2JK\b\b\1\2KN\7\27\2\2LN\5\20\t\2MJ\3\2\2\2ML\3\2\2\2NZ\3\2\2\2OP\f\7"+
-		"\2\2PQ\t\2\2\2QY\5\16\b\bRS\f\6\2\2ST\t\3\2\2TY\5\16\b\7UV\f\5\2\2VW\7"+
-		"\r\2\2WY\5\16\b\6XO\3\2\2\2XR\3\2\2\2XU\3\2\2\2Y\\\3\2\2\2ZX\3\2\2\2Z"+
-		"[\3\2\2\2[\17\3\2\2\2\\Z\3\2\2\2]^\t\4\2\2^\21\3\2\2\2_d\7\27\2\2`d\7"+
-		"\31\2\2ad\7\30\2\2bd\5\20\t\2c_\3\2\2\2c`\3\2\2\2ca\3\2\2\2cb\3\2\2\2"+
-		"d\23\3\2\2\2\n\34*\61DMXZc";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!}\4\2\t\2\4\3\t\3"+
+		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\2\3"+
+		"\2\3\2\3\2\7\2\33\n\2\f\2\16\2\36\13\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2"+
+		"\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2\64\n\2\f\2\16\2\67"+
+		"\13\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\5\2B\n\2\3\2\3\2\3\2\7\2G\n"+
+		"\2\f\2\16\2J\13\2\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5"+
+		"\3\6\3\6\3\6\5\6\\\n\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\5\be\n\b\3\b\3\b\3"+
+		"\b\3\b\3\b\3\b\3\b\3\b\3\b\7\bp\n\b\f\b\16\bs\13\b\3\t\3\t\3\n\3\n\3\n"+
+		"\3\n\5\n{\n\n\3\n\2\4\2\16\13\2\4\6\b\n\f\16\20\22\2\5\3\2\r\16\3\2\17"+
+		"\20\3\2\22\25\2\u0086\2A\3\2\2\2\4K\3\2\2\2\6N\3\2\2\2\bS\3\2\2\2\n[\3"+
+		"\2\2\2\f]\3\2\2\2\16d\3\2\2\2\20t\3\2\2\2\22z\3\2\2\2\24\25\b\2\1\2\25"+
+		"\26\7 \2\2\26\27\7\3\2\2\27\34\5\2\2\2\30\31\7\32\2\2\31\33\5\2\2\2\32"+
+		"\30\3\2\2\2\33\36\3\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\37\3\2\2\2\36"+
+		"\34\3\2\2\2\37 \7\4\2\2 B\3\2\2\2!\"\5\4\3\2\"#\5\2\2\n#B\3\2\2\2$B\5"+
+		"\6\4\2%B\5\b\5\2&\'\7\34\2\2\'(\7\30\2\2()\7\36\2\2)*\7\32\2\2*B\5\2\2"+
+		"\7+,\7\34\2\2,-\7\31\2\2-\65\7\5\2\2./\7\36\2\2/\60\7\6\2\2\60\61\5\2"+
+		"\2\2\61\62\7\7\2\2\62\64\3\2\2\2\63.\3\2\2\2\64\67\3\2\2\2\65\63\3\2\2"+
+		"\2\65\66\3\2\2\2\668\3\2\2\2\67\65\3\2\2\289\7\36\2\29:\7\6\2\2:;\5\2"+
+		"\2\2;<\7\b\2\2<B\3\2\2\2=>\5\f\7\2>?\5\2\2\4?B\3\2\2\2@B\7\26\2\2A\24"+
+		"\3\2\2\2A!\3\2\2\2A$\3\2\2\2A%\3\2\2\2A&\3\2\2\2A+\3\2\2\2A=\3\2\2\2A"+
+		"@\3\2\2\2BH\3\2\2\2CD\f\5\2\2DE\7\27\2\2EG\5\2\2\6FC\3\2\2\2GJ\3\2\2\2"+
+		"HF\3\2\2\2HI\3\2\2\2I\3\3\2\2\2JH\3\2\2\2KL\7\33\2\2LM\7\34\2\2M\5\3\2"+
+		"\2\2NO\7\34\2\2OP\7\t\2\2PQ\5\n\6\2QR\7\n\2\2R\7\3\2\2\2ST\7\34\2\2TU"+
+		"\7\13\2\2UV\5\n\6\2VW\7\f\2\2W\t\3\2\2\2X\\\5\16\b\2Y\\\5\22\n\2Z\\\7"+
+		"\34\2\2[X\3\2\2\2[Y\3\2\2\2[Z\3\2\2\2\\\13\3\2\2\2]^\7\33\2\2^_\7\34\2"+
+		"\2_`\7\34\2\2`\r\3\2\2\2ab\b\b\1\2be\7\35\2\2ce\5\20\t\2da\3\2\2\2dc\3"+
+		"\2\2\2eq\3\2\2\2fg\f\7\2\2gh\t\2\2\2hp\5\16\b\bij\f\6\2\2jk\t\3\2\2kp"+
+		"\5\16\b\7lm\f\5\2\2mn\7\21\2\2np\5\16\b\6of\3\2\2\2oi\3\2\2\2ol\3\2\2"+
+		"\2ps\3\2\2\2qo\3\2\2\2qr\3\2\2\2r\17\3\2\2\2sq\3\2\2\2tu\t\4\2\2u\21\3"+
+		"\2\2\2v{\7\35\2\2w{\7\37\2\2x{\7\36\2\2y{\5\20\t\2zv\3\2\2\2zw\3\2\2\2"+
+		"zx\3\2\2\2zy\3\2\2\2{\23\3\2\2\2\13\34\65AH[doqz";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

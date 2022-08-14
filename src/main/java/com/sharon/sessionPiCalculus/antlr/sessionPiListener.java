@@ -1,6 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -81,6 +79,18 @@ public interface sessionPiListener extends ParseTreeListener {
 	 */
 	void exitSequentialProcess(sessionPiParser.SequentialProcessContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code branchProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void enterBranchProcess(sessionPiParser.BranchProcessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code branchProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void exitBranchProcess(sessionPiParser.BranchProcessContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code sendProcess}
 	 * labeled alternative in {@link sessionPiParser#process}.
 	 * @param ctx the parse tree
@@ -92,6 +102,18 @@ public interface sessionPiListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSendProcess(sessionPiParser.SendProcessContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code selectProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectProcess(sessionPiParser.SelectProcessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code selectProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectProcess(sessionPiParser.SelectProcessContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link sessionPiParser#scopeRestrict}.
 	 * @param ctx the parse tree
@@ -151,13 +173,13 @@ public interface sessionPiListener extends ParseTreeListener {
 	 * labeled alternative in {@link sessionPiParser#payload}.
 	 * @param ctx the parse tree
 	 */
-	void enterVarPayload(sessionPiParser.VarPayloadContext ctx);
+	void enterChannelPayload(sessionPiParser.ChannelPayloadContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code channelPayload}
 	 * labeled alternative in {@link sessionPiParser#payload}.
 	 * @param ctx the parse tree
 	 */
-	void exitVarPayload(sessionPiParser.VarPayloadContext ctx);
+	void exitChannelPayload(sessionPiParser.ChannelPayloadContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link sessionPiParser#scopeSession}.
 	 * @param ctx the parse tree
@@ -190,13 +212,13 @@ public interface sessionPiListener extends ParseTreeListener {
 	void exitBool(sessionPiParser.BoolContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code values}
-	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
+	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
 	 * @param ctx the parse tree
 	 */
 	void enterValues(sessionPiParser.ValuesContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code values}
-	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
+	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
 	 * @param ctx the parse tree
 	 */
 	void exitValues(sessionPiParser.ValuesContext ctx);
