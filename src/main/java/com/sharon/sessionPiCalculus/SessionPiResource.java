@@ -1,7 +1,9 @@
 package com.sharon.sessionPiCalculus;
 
+import com.sharon.sessionPiCalculus.antlr.Utils;
 import com.sharon.sessionPiCalculus.dao.InputDao;
 import com.sharon.sessionPiCalculus.dao.ProcessDao;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -21,7 +23,10 @@ public class SessionPiResource {
         try {
             System.out.println(input.getInput());
             System.out.println(input.getProcessList().get(0).getName());
-            System.out.println(input.getProcessList().get(0).getTypingContext().getType());
+//            System.out.println(input.getInput());
+//            System.out.println(input.getProcessList().get(0).getTypingContextList().get("y"));
+//            InputDao.sessionVariableObjects = input.getSessionVariables();
+            ParseTree tree = Utils.createVisitor(input.getInput(), input, null);
         }
         catch (Exception e){
 

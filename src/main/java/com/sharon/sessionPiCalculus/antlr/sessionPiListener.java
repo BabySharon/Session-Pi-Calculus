@@ -81,6 +81,18 @@ public interface sessionPiListener extends ParseTreeListener {
 	 */
 	void exitSequentialProcess(sessionPiParser.SequentialProcessContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code branchProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void enterBranchProcess(sessionPiParser.BranchProcessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code branchProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void exitBranchProcess(sessionPiParser.BranchProcessContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code sendProcess}
 	 * labeled alternative in {@link sessionPiParser#process}.
 	 * @param ctx the parse tree
@@ -92,6 +104,18 @@ public interface sessionPiListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSendProcess(sessionPiParser.SendProcessContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code selectProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectProcess(sessionPiParser.SelectProcessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code selectProcess}
+	 * labeled alternative in {@link sessionPiParser#process}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectProcess(sessionPiParser.SelectProcessContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link sessionPiParser#scopeRestrict}.
 	 * @param ctx the parse tree
@@ -190,13 +214,13 @@ public interface sessionPiListener extends ParseTreeListener {
 	void exitBool(sessionPiParser.BoolContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code values}
-	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
+	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
 	 * @param ctx the parse tree
 	 */
 	void enterValues(sessionPiParser.ValuesContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code values}
-	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
+	 * labeled alternative in {@link sessionPiParser#processprocessprocessprocessprocessprocessprocessprocessprocesspayloadpayloadpayload}.
 	 * @param ctx the parse tree
 	 */
 	void exitValues(sessionPiParser.ValuesContext ctx);

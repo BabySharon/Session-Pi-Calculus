@@ -1,4 +1,8 @@
-package com.sharon.sessionPiCalculus.antlr;// Generated from sessionPi.g4 by ANTLR 4.7.2
+// Generated from sessionPi.g4 by ANTLR 4.7.2
+package com.sharon.sessionPiCalculus.antlr;
+
+import com.sharon.sessionPiCalculus.antlr.sessionPiParser;
+import com.sharon.sessionPiCalculus.antlr.sessionPiVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -58,7 +62,21 @@ public class sessionPiBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitBranchProcess(sessionPiParser.BranchProcessContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitSendProcess(sessionPiParser.SendProcessContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSelectProcess(sessionPiParser.SelectProcessContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -94,6 +112,9 @@ public class sessionPiBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitStringPayload(sessionPiParser.StringPayloadContext ctx) { return visitChildren(ctx); }
+
+
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -107,7 +128,7 @@ public class sessionPiBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitScopeSession(sessionPiParser.ScopeSessionContext ctx) throws Exception { return visitChildren(ctx); }
+	@Override public T visitScopeSession(sessionPiParser.ScopeSessionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
