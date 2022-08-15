@@ -1,8 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
-
-import com.sharon.sessionPiCalculus.antlr.sessionPiParser;
-import com.sharon.sessionPiCalculus.antlr.sessionPiVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -112,9 +108,6 @@ public class sessionPiBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitStringPayload(sessionPiParser.StringPayloadContext ctx) { return visitChildren(ctx); }
-
-
-
 	/**
 	 * {@inheritDoc}
 	 *

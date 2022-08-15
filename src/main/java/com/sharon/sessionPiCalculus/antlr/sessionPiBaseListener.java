@@ -1,5 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -179,24 +178,23 @@ public class sessionPiBaseListener implements sessionPiListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStringPayload(sessionPiParser.StringPayloadContext ctx) { }
-
-	@Override
-	public void enterVarPayload(sessionPiParser.VarPayloadContext ctx) {
-
-	}
-
-	@Override
-	public void exitVarPayload(sessionPiParser.VarPayloadContext ctx) {
-
-	}
-
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-
-
+	@Override public void enterVarPayload(sessionPiParser.VarPayloadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarPayload(sessionPiParser.VarPayloadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterScopeSession(sessionPiParser.ScopeSessionContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -1,5 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -106,7 +105,7 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringPayload(sessionPiParser.StringPayloadContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code channelPayload}
+	 * Visit a parse tree produced by the {@code varPayload}
 	 * labeled alternative in {@link sessionPiParser#payload}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -117,7 +116,7 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitScopeSession(sessionPiParser.ScopeSessionContext ctx) throws Exception;
+	T visitScopeSession(sessionPiParser.ScopeSessionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link sessionPiParser#expr}.
 	 * @param ctx the parse tree

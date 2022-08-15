@@ -1,6 +1,4 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -171,13 +169,13 @@ public interface sessionPiListener extends ParseTreeListener {
 	 */
 	void exitStringPayload(sessionPiParser.StringPayloadContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code channelPayload}
+	 * Enter a parse tree produced by the {@code varPayload}
 	 * labeled alternative in {@link sessionPiParser#payload}.
 	 * @param ctx the parse tree
 	 */
 	void enterVarPayload(sessionPiParser.VarPayloadContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code channelPayload}
+	 * Exit a parse tree produced by the {@code varPayload}
 	 * labeled alternative in {@link sessionPiParser#payload}.
 	 * @param ctx the parse tree
 	 */

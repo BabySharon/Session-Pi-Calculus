@@ -66,6 +66,6 @@ VAR: [a-z]{1};
 INT: [0-9]+;
 FLOAT: [0-9]+'.'[0-9]+;
 CAPS: [A-Z]{1};
-IDENTIFIER: [a-z0-9]*;
+IDENTIFIER: [a-z0-9][a-z0-9]*;
 STRING: '"'(.)*?'"' ; // . matches any character except line breaks
 WS : [ \t\r\n]+ -> skip ;
