@@ -153,7 +153,7 @@ public class Utils {
                 if(!(sessionType.get(0).charAt(0) == '&'))
                     res = false;
                 for (int i = 0; i < childCount; i++) {
-                    ((sessionPiParser.BranchProcessContext) c).getChild(i).toString()
+                    ((sessionPiParser.BranchProcessContext) c).getChild(i).toString();
                 }
 
             }

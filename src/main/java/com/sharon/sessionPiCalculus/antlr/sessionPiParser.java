@@ -1,4 +1,6 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
+package com.sharon.sessionPiCalculus.antlr;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
