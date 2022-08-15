@@ -4,7 +4,7 @@
 // more processes as input
 // Assigning processes
 
-
+//TODO Pi types
 grammar sessionPi;
 
 process:
@@ -12,8 +12,8 @@ process:
     | scopeRestrict process                                             # scopeRestriction
     | send                                                              # sendProcess
     | receive                                                           # receiveProcess
-    | VAR SELECT STRING SEQ process                                     # selectProcess
-    | VAR BRANCH '{' (STRING ':' process ',')* STRING ':' process '}'   # branchProcess
+    | VAR SELECT IDENTIFIER SEQ process                                     # selectProcess
+    | VAR BRANCH '{' (IDENTIFIER ':' process ',')* IDENTIFIER ':' process '}'   # branchProcess
     | process PARALLEL process                                          # parallel
     | scopeSession process                                              # scopeSessionLabel
     | NULL                                                              # inaction
@@ -28,7 +28,7 @@ receive: channel=VAR '(' payload ')';
 payload:
     expr                                    # exprPayload
     |values                                 # stringPayload
-    | VAR                                   # channelPayload
+    | VAR                                   # varPayload
     ;
 
 
@@ -56,7 +56,7 @@ values:
     ;
 
 // Lexer Rules
-NULL: '0';
+NULL: 'zero';
 PARALLEL: '|';
 SELECT: 'select';
 BRANCH:'branch';
@@ -64,7 +64,8 @@ SEQ: '.';
 NEW: 'new';
 VAR: [a-z]{1};
 INT: [0-9]+;
-STRING: '"'(.)*?'"' ; // . matches any character except line breaks
 FLOAT: [0-9]+'.'[0-9]+;
 CAPS: [A-Z]{1};
+IDENTIFIER: [a-z0-9]*;
+STRING: '"'(.)*?'"' ; // . matches any character except line breaks
 WS : [ \t\r\n]+ -> skip ;

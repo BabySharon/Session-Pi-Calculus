@@ -289,9 +289,9 @@ public class sessionPiParser extends Parser {
 	public static class BranchProcessContext extends ProcessContext {
 		public TerminalNode VAR() { return getToken(sessionPiParser.VAR, 0); }
 		public TerminalNode BRANCH() { return getToken(sessionPiParser.BRANCH, 0); }
-		public List<TerminalNode> STRING() { return getTokens(sessionPiParser.STRING); }
-		public TerminalNode STRING(int i) {
-			return getToken(sessionPiParser.STRING, i);
+		public List<TerminalNode> IDENTIFIER() { return getTokens(sessionPiParser.IDENTIFIER); }
+		public TerminalNode IDENTIFIER(int i) {
+			return getToken(sessionPiParser.IDENTIFIER, i);
 		}
 		public List<ProcessContext> process() {
 			return getRuleContexts(ProcessContext.class);

@@ -143,7 +143,19 @@ public class Utils {
             break;
 
             case "BranchProcessContext": {
-                System.out.println("here");
+                boolean res = true;
+                int childCount= ((sessionPiParser.BranchProcessContext) c).getChildCount();
+                List<String> sessionType = allSessionTypes.get(name);
+                /* Validate
+                * 1. If the type is branch
+                * 2. If the number of branches match
+                * 3. Check if the labels match */
+                if(!(sessionType.get(0).charAt(0) == '&'))
+                    res = false;
+                for (int i = 0; i < childCount; i++) {
+                    ((sessionPiParser.BranchProcessContext) c).getChild(i).toString()
+                }
+
             }
             break;
         }
