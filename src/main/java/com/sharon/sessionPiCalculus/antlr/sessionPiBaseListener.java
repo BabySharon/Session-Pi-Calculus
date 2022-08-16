@@ -1,7 +1,6 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
 package com.sharon.sessionPiCalculus.antlr;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -204,6 +203,18 @@ public class sessionPiBaseListener implements sessionPiListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitScopeSession(sessionPiParser.ScopeSessionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBranch(sessionPiParser.BranchContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBranch(sessionPiParser.BranchContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -193,6 +193,16 @@ public interface sessionPiListener extends ParseTreeListener {
 	 */
 	void exitScopeSession(sessionPiParser.ScopeSessionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link sessionPiParser#branch}.
+	 * @param ctx the parse tree
+	 */
+	void enterBranch(sessionPiParser.BranchContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link sessionPiParser#branch}.
+	 * @param ctx the parse tree
+	 */
+	void exitBranch(sessionPiParser.BranchContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link sessionPiParser#expr}.
 	 * @param ctx the parse tree
 	 */

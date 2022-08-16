@@ -120,6 +120,12 @@ public interface sessionPiVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitScopeSession(sessionPiParser.ScopeSessionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link sessionPiParser#branch}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBranch(sessionPiParser.BranchContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link sessionPiParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
