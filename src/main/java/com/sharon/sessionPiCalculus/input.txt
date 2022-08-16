@@ -1,1 +1,1 @@
-new x y  P[x!<1>.0] | Q[ y?(a).0]
+new x y  P[x branch {l1:x<1>, l2:x<2>}.x<b>.zero] | Q[ y select l2.x<1>.y(a).zero

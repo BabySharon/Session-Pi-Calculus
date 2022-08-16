@@ -1,7 +1,6 @@
 package com.sharon.sessionPiCalculus.antlr;
 
-import com.sharon.sessionPiCalculus.dao.Message;
-import com.sharon.sessionPiCalculus.dao.InputDao;
+import com.sharon.sessionPiCalculus.dao.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -17,7 +16,7 @@ import java.util.*;
 
 public class Utils {
     public static Map<String, Map<String, String>> allTypingContexts = new HashMap<>();
-    public static Map<String, List<String>> allSessionTypes = new HashMap<>();
+    public static Map<String, List<BasicType>> allSessionTypes = new HashMap<>();
 
 
     public static ParseTree createVisitor(String input, InputDao inputDao, String name) throws Exception {
@@ -82,16 +81,16 @@ public class Utils {
 
             case "SendProcessContext": {
                 boolean res = true;
-                String sendType = "";
+                BasicType sendType = null;
                 sessionPiParser.SendContext s = ((sessionPiParser.SendProcessContext) c).send();
                 Map<String, String> typingContext = allTypingContexts.get(name);
-                List<String> sessionType = allSessionTypes.get(name);
+                List<BasicType> sessionType = allSessionTypes.get(name);
                 System.out.println("Rule: T-Out   Process: " + name);
                 if(!sessionType.isEmpty()) {
                     sendType = sessionType.remove(0);
                 }
                 /* Validating if channel type is send type */
-                if (!(sendType.charAt(0) == '!')) {
+                if (!(sendType.getType().equals(Types.SEND))) {
                     res = false;
                 }
                 /* Validating the parameter */
@@ -112,16 +111,16 @@ public class Utils {
 
             case "ReceiveProcessContext": {
                 boolean res = true;
-                String receiveType = ";";
+                BasicType receiveType = null;
                 sessionPiParser.ReceiveContext r = ((sessionPiParser.ReceiveProcessContext) c).receive();
                 Map<String, String> typingContext = allTypingContexts.get(name);
-                List<String> sessionType = allSessionTypes.get(name);
+                List<BasicType> sessionType = allSessionTypes.get(name);
                 System.out.println("Rule: T-In \t  Process: " + name);
                 if(!sessionType.isEmpty()) {
                     receiveType = sessionType.remove(0);
                 }
                 /* Validating if channel type is send type */
-                if (!(receiveType.charAt(0) == '?')) {
+                if (!(receiveType.getType().equals(Types.RECEIVE))) {
                     res = false;
                 }
 
@@ -143,25 +142,45 @@ public class Utils {
             break;
 
             case "BranchProcessContext": {
+                BasicType bt = null;
+                System.out.println("\"Rule: T-Branch \\t  Process: \" + name");
+                sessionPiParser.BranchProcessContext bc = (sessionPiParser.BranchProcessContext) c;
                 boolean res = true;
-                int childCount= ((sessionPiParser.BranchProcessContext) c).getChildCount();
-                List<String> sessionType = allSessionTypes.get(name);
+                List<sessionPiParser.ProcessContext> pc = new ArrayList<>();
+                StringBuilder errorMessage = new StringBuilder("");
+                int labelCount = 0;
+                List<BasicType> sessionType = allSessionTypes.get(name);
+                Map<String, List<BasicType>> branchMap = ((CompositeType)bt).getBranch();
                 /* Validate
                 * 1. If the type is branch
                 * 2. If the number of branches match
-                * 3. Check if the labels match */
-                if(!(sessionType.get(0).charAt(0) == '&'))
+                * 3. Check if the labels match */ //TODO in front end restrict only the specified labels in the output or generate the branch
+                bt = sessionType.remove(0);
+                if(!(bt.getType().equals(Types.BRANCH))) {
                     res = false;
-                for (int i = 0; i < childCount; i++) {
-                    ((sessionPiParser.BranchProcessContext) c).getChild(i).toString();
+                    errorMessage.append(bc.VAR().getText()+" not of branch type.\n");
                 }
-
+                labelCount = bc.IDENTIFIER().size();
+               int labelCountType =  (branchMap.keySet().size();
+                if(labelCountType != labelCount) {
+                    res = false;
+                    errorMessage.append(bc.VAR().getText()+" has wrong label count");
+                }
+                pc = bc.process();
+                for (sessionPiParser.ProcessContext p: pc) {
+                    if(!sessionType.isEmpty()){
+                        allSessionTypes.put(name, )
+                        iterateChildren(p, name);
+                    }
+                }
             }
             break;
+
+
         }
     }
 
-    private static Message checkBaseType(String type, sessionPiParser.PayloadContext payload, Map<String, String> typingContext) {
+    private static Message checkBaseType(BasicType type, sessionPiParser.PayloadContext payload, Map<String, String> typingContext) {
         boolean res = true;
         Message mssg = new Message();
         switch (payload.getClass().getName().split("\\$")[1]) {
@@ -174,7 +193,7 @@ public class Utils {
                         t = "Int";
                     else
                         t = "Bool";
-                    if (!t.equalsIgnoreCase(type.substring(1)))
+                    if (!t.equalsIgnoreCase(type.getTypeString().substring(1)))
                         res = false;
                 }
                 mssg.setReceivedType(t);
@@ -189,7 +208,7 @@ public class Utils {
                     System.out.println("Provide type for " + ((sessionPiParser.VarPayloadContext) payload).VAR().getText()
                             + " in the input");
                 }
-                if (!t.equalsIgnoreCase(type.substring(1)))
+                if (!t.equalsIgnoreCase(type.getTypeString().substring(1)))
                     res = false;
                 mssg.setRes(res);
                 mssg.setReceivedType(t);

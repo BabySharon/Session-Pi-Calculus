@@ -12,9 +12,9 @@ public class ProcessDao {
     private String name;
 
     @JsonDeserialize(using = SessionTypeDeserializer.class)
-    private List<String> sessionType;
+    private List<BasicType> sessionType;
 
-    public ProcessDao(String name, List<String> sessionType, Map<String, String> typingContextMap) {
+    public ProcessDao(String name, List<BasicType> sessionType, Map<String, String> typingContextMap) {
         this.name = name;
         this.sessionType = sessionType;
         this.typingContextMap = typingContextMap;
@@ -47,17 +47,17 @@ public class ProcessDao {
 
     public String getSessionTypeString() {
         StringBuilder sb = new StringBuilder("");
-        for (String str: sessionType) {
-            sb.append(str);
+        for (BasicType bt: sessionType) {
+            sb.append(bt.typeString);
         }
         return sb.toString();
     }
 
-    public List<String> getSessionType(){
+    public List<BasicType> getSessionType(){
         return sessionType;
     }
 
-    public void setSessionType(List<String> sessionType) {
+    public void setSessionType(List<BasicType> sessionType) {
         this.sessionType = sessionType;
     }
 }

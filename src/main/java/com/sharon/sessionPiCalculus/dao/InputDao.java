@@ -38,8 +38,8 @@ public class InputDao {
         return allTypingContexts;
     }
 
-    public Map<String, List<String>> getAllSessionTypes() {
-        Map<String, List<String>> allSessionTypes = new HashMap<>();
+    public Map<String, List<BasicType>> getAllSessionTypes() {
+        Map<String, List<BasicType>> allSessionTypes = new HashMap<>();
         for (ProcessDao processDao: processList ) {
             allSessionTypes.put(processDao.getName(), processDao.getSessionType());
         }

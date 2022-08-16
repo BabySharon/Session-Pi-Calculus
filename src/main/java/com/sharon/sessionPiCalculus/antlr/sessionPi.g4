@@ -13,7 +13,7 @@ process:
     | send                                                              # sendProcess
     | receive                                                           # receiveProcess
     | VAR SELECT IDENTIFIER SEQ process                                     # selectProcess
-    | VAR BRANCH '{' (IDENTIFIER ':' process ',')* IDENTIFIER ':' process '}'   # branchProcess
+    | VAR BRANCH '{' (branch ',')* branch '}'   # branchProcess
     | process PARALLEL process                                          # parallel
     | scopeSession process                                              # scopeSessionLabel
     | NULL                                                              # inaction
@@ -33,6 +33,8 @@ payload:
 
 
 scopeSession: NEW x=VAR y=VAR;
+
+branch: IDENTIFIER ':' process;
 
 expr:
       expr op=('*'|'/') expr

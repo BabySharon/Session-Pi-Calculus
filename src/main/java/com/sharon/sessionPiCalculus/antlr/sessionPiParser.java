@@ -111,6 +111,11 @@ public class sessionPiParser extends Parser {
 		public void copyFrom(ProcessContext ctx) {
 			super.copyFrom(ctx);
 		}
+
+		@Override
+		public String toString() {
+			return "ProcessContext";
+		}
 	}
 	public static class ScopeSessionLabelContext extends ProcessContext {
 		public ScopeSessionContext scopeSession() {
@@ -133,6 +138,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeSessionLabel(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ScopeSessionLabelContext{}";
+		}
 	}
 	public static class InactionContext extends ProcessContext {
 		public TerminalNode NULL() { return getToken(sessionPiParser.NULL, 0); }
@@ -149,6 +159,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitInaction(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "InactionContext";
 		}
 	}
 	public static class ReceiveProcessContext extends ProcessContext {
@@ -168,6 +183,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitReceiveProcess(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ReceiveProcessContext";
 		}
 	}
 	public static class ParallelContext extends ProcessContext {
@@ -192,6 +212,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitParallel(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ParallelContext";
+		}
 	}
 	public static class ScopeRestrictionContext extends ProcessContext {
 		public ScopeRestrictContext scopeRestrict() {
@@ -213,6 +238,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeRestriction(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ScopeRestrictionContext";
 		}
 	}
 	public static class SequentialProcessContext extends ProcessContext {
@@ -240,6 +270,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSequentialProcess(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "SequentialProcessContext";
 		}
 	}
 	public static class BranchProcessContext extends ProcessContext {
@@ -269,6 +304,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitBranchProcess(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "BranchProcessContext";
+		}
 	}
 	public static class SendProcessContext extends ProcessContext {
 		public SendContext send() {
@@ -287,6 +327,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSendProcess(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "SendProcessContext";
 		}
 	}
 	public static class SelectProcessContext extends ProcessContext {
@@ -310,6 +355,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSelectProcess(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "SelectProcessContext";
 		}
 	}
 
@@ -533,6 +583,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeRestrict(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ScopeRestrictContext";
+		}
 	}
 
 	public final ScopeRestrictContext scopeRestrict() throws RecognitionException {
@@ -580,6 +635,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitSend(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "SendContext";
 		}
 	}
 
@@ -633,6 +693,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitReceive(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ReceiveContext";
+		}
 	}
 
 	public final ReceiveContext receive() throws RecognitionException {
@@ -672,6 +737,11 @@ public class sessionPiParser extends Parser {
 		public void copyFrom(PayloadContext ctx) {
 			super.copyFrom(ctx);
 		}
+
+		@Override
+		public String toString() {
+			return "PayloadContext";
+		}
 	}
 	public static class VarPayloadContext extends PayloadContext {
 		public TerminalNode VAR() { return getToken(sessionPiParser.VAR, 0); }
@@ -688,6 +758,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitVarPayload(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "VarPayloadContext";
 		}
 	}
 	public static class StringPayloadContext extends PayloadContext {
@@ -708,6 +783,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitStringPayload(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "StringPayloadContext";
+		}
 	}
 	public static class ExprPayloadContext extends PayloadContext {
 		public ExprContext expr() {
@@ -726,6 +806,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitExprPayload(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ExprPayloadContext";
 		}
 	}
 
@@ -798,6 +883,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitScopeSession(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ScopeSessionContext";
+		}
 	}
 
 	public final ScopeSessionContext scopeSession() throws RecognitionException {
@@ -853,6 +943,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitExpr(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ExprContext";
 		}
 	}
 
@@ -997,6 +1092,11 @@ public class sessionPiParser extends Parser {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitBool(this);
 			else return visitor.visitChildren(this);
 		}
+
+		@Override
+		public String toString() {
+			return "BoolContext{}";
+		}
 	}
 
 	public final BoolContext bool() throws RecognitionException {
@@ -1052,6 +1152,11 @@ public class sessionPiParser extends Parser {
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof sessionPiVisitor ) return ((sessionPiVisitor<? extends T>)visitor).visitValues(this);
 			else return visitor.visitChildren(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ValuesContext";
 		}
 	}
 
