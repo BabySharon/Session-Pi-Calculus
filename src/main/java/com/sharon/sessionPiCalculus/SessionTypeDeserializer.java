@@ -37,7 +37,7 @@ public class SessionTypeDeserializer extends JsonDeserializer {
                 case BRANCH: {
                     Map<String, List<BasicType>> branch = new HashMap<>();
                     String label = "";
-                    List<String> list = Arrays.stream(str.substring(2, str.length() - 2).split("[,|:]"))
+                    List<String> list = Arrays.stream(str.substring(2, str.length() - 1).split("[,|:]"))
                             .map(s -> s.strip()).collect(Collectors.toList());
                     for (int i = 0; i < list.size(); i++) {
                         if (i % 2 == 0)
@@ -47,7 +47,7 @@ public class SessionTypeDeserializer extends JsonDeserializer {
                                             .split("\\."))
                                     .map(s -> getBasicTypes(s))
                                     .collect(Collectors.toList());
-                            branch.put(label, basicTypes);
+                                branch.put(label, basicTypes);
                             label = "";
                         }
                     }
