@@ -1,12 +1,12 @@
-package com.sharon.sessionPiCalculus;
+package com.sharon.sessionPiCalculus.typing;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.sharon.sessionPiCalculus.dao.BasicType;
-import com.sharon.sessionPiCalculus.dao.CompositeType;
-import com.sharon.sessionPiCalculus.dao.Types;
+import com.sharon.sessionPiCalculus.typing.dao.BasicType;
+import com.sharon.sessionPiCalculus.typing.dao.CompositeType;
+import com.sharon.sessionPiCalculus.typing.dao.Types;
 
 import java.io.IOException;
 import java.util.*;

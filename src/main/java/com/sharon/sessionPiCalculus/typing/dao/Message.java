@@ -1,12 +1,23 @@
-package com.sharon.sessionPiCalculus.dao;
+package com.sharon.sessionPiCalculus.typing.dao;
+
+import com.sharon.sessionPiCalculus.reduction.dao.Communication;
 
 public class Message {
     private String receivedType;
     private boolean res;
     private boolean add;
+    private Communication comm;
 
     public Message() {
 
+    }
+
+    public Communication getComm() {
+        return comm;
+    }
+
+    public void setComm(Communication comm) {
+        this.comm = comm;
     }
 
     public String getReceivedType() {

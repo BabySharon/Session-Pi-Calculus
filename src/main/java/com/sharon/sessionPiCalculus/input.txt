@@ -1,1 +1,6 @@
-new x y  P[x branch {l1:x<1>, l2:x<2>}.x<b>.zero] | Q[ y select l2.x<1>.y(a).zero
+new x y  P[x branch {l1:x<m>, l2:x(2).x<true>}.x<b>.zero] | Q[ y select l2.(x<1>.x(z)).y(a).zero]
+
+
+new x y P[x<1>.x(a).zero] | Q[y(b).y<true>.zero]
+
+

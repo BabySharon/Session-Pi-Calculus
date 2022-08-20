@@ -1,7 +1,7 @@
-package com.sharon.sessionPiCalculus.dao;
+package com.sharon.sessionPiCalculus.typing.dao;
 
 public class BasicType {
-    String typeString;
+    public String typeString;
     Types type;
 
     public String getTypeString() {

@@ -12,7 +12,7 @@ process:
     | scopeRestrict process                                             # scopeRestriction
     | send                                                              # sendProcess
     | receive                                                           # receiveProcess
-    | VAR SELECT IDENTIFIER SEQ process                                     # selectProcess
+    | VAR SELECT IDENTIFIER SEQ '(' process(SEQ process)* ')'                                     # selectProcess
     | VAR BRANCH '{' (branch ',')* branch '}'   # branchProcess
     | process PARALLEL process                                          # parallel
     | scopeSession process                                              # scopeSessionLabel
@@ -34,7 +34,7 @@ payload:
 
 scopeSession: NEW x=VAR y=VAR;
 
-branch: IDENTIFIER ':' process;
+branch: IDENTIFIER ':' process (SEQ process)*;
 
 expr:
       expr op=('*'|'/') expr

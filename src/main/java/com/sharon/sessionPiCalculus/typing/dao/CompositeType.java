@@ -1,4 +1,4 @@
-package com.sharon.sessionPiCalculus.dao;
+package com.sharon.sessionPiCalculus.typing.dao;
 
 import java.util.List;
 import java.util.Map;

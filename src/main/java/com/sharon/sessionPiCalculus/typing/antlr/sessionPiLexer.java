@@ -1,14 +1,11 @@
 // Generated from sessionPi.g4 by ANTLR 4.7.2
-package com.sharon.sessionPiCalculus.antlr;
+package com.sharon.sessionPiCalculus.typing.antlr;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class sessionPiLexer extends Lexer {

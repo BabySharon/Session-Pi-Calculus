@@ -1,14 +1,8 @@
 package com.sharon.sessionPiCalculus;
 
-import com.sharon.sessionPiCalculus.antlr.*;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.File;
 import java.util.*;
 
 public class DropwizardApplication extends Application<AppConfiguration> {

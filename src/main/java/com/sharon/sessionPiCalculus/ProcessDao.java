@@ -1,12 +1,12 @@
-package com.sharon.sessionPiCalculus.dao;
+package com.sharon.sessionPiCalculus;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.sharon.sessionPiCalculus.SessionTypeDeserializer;
+import com.sharon.sessionPiCalculus.typing.SessionTypeDeserializer;
+import com.sharon.sessionPiCalculus.typing.dao.BasicType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 public class ProcessDao {
     private String name;
