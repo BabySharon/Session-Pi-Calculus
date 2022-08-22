@@ -44,7 +44,7 @@ public class SessionTypeDeserializer extends JsonDeserializer {
                             label = list.get(i);
                         else {
                             List<BasicType> basicTypes = Arrays.stream(list.get(i)
-                                            .split("\\."))
+                                            .split("[\\.|^]"))
                                     .map(s -> getBasicTypes(s))
                                     .collect(Collectors.toList());
                                 branch.put(label, basicTypes);
@@ -52,9 +52,9 @@ public class SessionTypeDeserializer extends JsonDeserializer {
                         }
                     }
                     if (str.charAt(0) == BRANCH)
-                        type.add(new CompositeType(str, Types.BRANCH, branch));
+                        type.add(new CompositeType(str.replace('^','.'), Types.BRANCH, branch));
                     else
-                        type.add(new CompositeType(str, Types.SELECT, branch));
+                        type.add(new CompositeType(str.replace('^','.'), Types.SELECT, branch));
                 }
 
             }

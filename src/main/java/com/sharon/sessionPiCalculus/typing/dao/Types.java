@@ -5,5 +5,6 @@ public enum Types {
         RECEIVE,
         BRANCH,
         SELECT,
-        END
+        END,
+        UNKNOWN
 }

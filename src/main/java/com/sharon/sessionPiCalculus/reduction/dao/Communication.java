@@ -10,6 +10,13 @@ public class Communication extends SubProcess {
     private String value;
     private StdType stdType;
 
+    public Communication(String name, String value, StdType stdType, Types type) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+        this.stdType = stdType;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

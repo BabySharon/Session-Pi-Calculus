@@ -4,10 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScopeNode {
+    public void setChannel1(String channel1) {
+        this.channel1 = channel1;
+    }
+
+    public void setChannel2(String channel2) {
+        this.channel2 = channel2;
+    }
     private String channel1;
     private String channel2;
     List<ScopeNode> scopeNodeList = new ArrayList<>();
     List<ProcessNode> processNodeList = new ArrayList<>();
+
+    public ScopeNode() {
+
+    }
+
     public List<ScopeNode> getScopeNodeList() {
         return scopeNodeList;
     }
@@ -44,4 +56,5 @@ public class ScopeNode {
     public void addProcessNode(ProcessNode node){
         processNodeList.add(node);
     }
+
 }
