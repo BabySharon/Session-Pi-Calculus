@@ -29,7 +29,7 @@ public class Utils {
     public static Map<String, List<BasicType>> allSessionTypes = new HashMap<>();
     public static Map<String, String> processVariableMap = new HashMap<>();
 
-    public static ParseTree createVisitor(String input, InputDao inputDao, String name) throws Exception {
+    public static ParseTree createVisitor(String input, InputDao inputDao, String name, boolean red) throws Exception {
         ANTLRInputStream inputStream = new ANTLRInputStream(input);
         sessionPiLexer lexer = new sessionPiLexer(inputStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -38,11 +38,16 @@ public class Utils {
         System.out.println("-----------------Typing Rules-----------------");
         allTypingContexts = inputDao.getAllTypingContexts();
         allSessionTypes = inputDao.getAllSessionTypes();
-        Pointers point = typeCheckManager(tree, null, new Pointers());
+        Pointers point = typeCheckManager(tree, null, new Pointers(), red);
         allSessionTypes.clear();
         allTypingContexts.clear();
         processVariableMap.clear();
+        if(red)
+            semantics(point.sn);
         return tree;
+    }
+
+    private static void semantics(ScopeNode sn) {
     }
 
     public static String getStringFromSet(Collection<String> values) {
@@ -53,7 +58,7 @@ public class Utils {
         return String.valueOf(s);
     }
 
-    public static Pointers typeCheckManager(ParseTree c, String name, Pointers p) throws
+    public static Pointers typeCheckManager(ParseTree c, String name, Pointers p, boolean red) throws
             Exception {
         switch (c.toString()) {
             case "ScopeSessionLabelContext": {
@@ -69,26 +74,27 @@ public class Utils {
                     }
                 } else
                     System.out.println("Error in defining session variables");
-                iterateChildren(c, null, p);
+                iterateChildren(c, null, p, red);
             }
             break;
 
             case "ScopeSessionContext": {
                 System.out.println("Rule: RuleT-Res");
-                /* For Reduction */
-                sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
-                List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
-                if (p.currentScopeNode == null) {
-                    p.currentScopeNode = new ScopeNode();
-                    p.sn = p.currentScopeNode;
-                    p.currentScopeNode.setChannel1(channels.get(0));
-                    p.currentScopeNode.setChannel2(channels.get(1));
-                } else {
-                    ScopeNode newNode = new ScopeNode(channels.get(0), channels.get(1));
-                    p.currentScopeNode.addScopeNode(newNode);
-                    p.currentScopeNode = newNode;
+                if(red) {
+                    /* For Reduction */
+                    sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
+                    List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
+                    if (p.currentScopeNode == null) {
+                        p.currentScopeNode = new ScopeNode();
+                        p.sn = p.currentScopeNode;
+                        p.currentScopeNode.setChannel1(channels.get(0));
+                        p.currentScopeNode.setChannel2(channels.get(1));
+                    } else {
+                        ScopeNode newNode = new ScopeNode(channels.get(0), channels.get(1));
+                        p.currentScopeNode.addScopeNode(newNode);
+                        p.currentScopeNode = newNode;
+                    }
                 }
-
                 /* */
                 //                for (TerminalNode node : coVariables) {
 //                    if (!InputDao.sessionVariableObjects.keySet().contains(node.getText())) {
@@ -109,17 +115,19 @@ public class Utils {
 //                for (String k : processNames) {
 //                    typeCheckManager(c, allTypingContexts);
 //                }
-                iterateChildren(c, null, p);
+                iterateChildren(c, null, p, red);
             }
             break;
 
             case "SequentialProcessContext": {
                 String processName = ((sessionPiParser.SequentialProcessContext) c).CAPS().getText();
-                /* For Reduction */
-                p.currentProcessNode = new ProcessNode();
-                p.currentProcessNode.setName(processName);
-                /* */
-                iterateChildren(c, processName, p);
+                if(red) {
+                    /* For Reduction */
+                    p.currentProcessNode = new ProcessNode();
+                    p.currentProcessNode.setName(processName);
+                    /* */
+                }
+                iterateChildren(c, processName, p, red);
             }
             break;
 
@@ -155,12 +163,13 @@ public class Utils {
                         System.out.println("Error: " + sendType.getTypeString() + " expected. Got " + t);
 
                 }
-
-                /* For Reduction */
-                comm = m.getComm();
-                comm.type = Types.SEND;
-                p.addCommunicationNode(comm);
-                /* */
+                if(red) {
+                    /* For Reduction */
+                    comm = m.getComm();
+                    comm.type = Types.SEND;
+                    p.addCommunicationNode(comm);
+                    /* */
+                }
             }
             break;
 
@@ -197,13 +206,13 @@ public class Utils {
                         System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + t);
 
                 }
-
-                /* Reduction */
-                comm = m.getComm();
-                comm.type = Types.RECEIVE;
-                p.addCommunicationNode(comm);
-                /* */
-
+                if(red){
+                    /* Reduction */
+                    comm = m.getComm();
+                    comm.type = Types.RECEIVE;
+                    p.addCommunicationNode(comm);
+                    /* */
+                }
             }
             break;
 
@@ -235,21 +244,24 @@ public class Utils {
                 if (!res)
                     System.out.println(errorMessage);
 
-                /* For Reduction */
-                p.choice = new Choice();
-                p.isChoiceSet = true;
-                p.choice.type = Types.SELECT;
+                if(red) {
+                    /* For Reduction */
+                    p.choice = new Choice();
+                    p.isChoiceSet = true;
+                    p.choice.type = Types.SELECT;
+                }
 
                 allSessionTypes.put(name, selectMap.get(label));
-//                p = typeCheckManager(spc.process(), name, p);
-                p = iterateChildren(spc, name, p);
+                p = iterateChildren(spc, name, p, red);
                 allSessionTypes.put(name, sessionType);
 
-                p.choice.addProcess(label, p.createListCopy(p.commList));
-                p.currentProcessNode.addSubprocess(p.choice);
-                p.isChoiceSet = false;
-                p.commList.clear();
-                /* */
+                if(red) {
+                    p.choice.addProcess(label, p.createListCopy(p.commList));
+                    p.currentProcessNode.addSubprocess(p.choice);
+                    p.isChoiceSet = false;
+                    p.commList.clear();
+                    /* */
+                }
             }
             break;
 
@@ -285,33 +297,38 @@ public class Utils {
                 bc = bpc.branch();
                 if (res == false)
                     System.out.println(errorMessage);
-
-                /* For Reduction */
-                p.choice = new Choice();
-                p.choice.type = Types.BRANCH;
-                p.isChoiceSet = true;
+                if(red) {
+                    /* For Reduction */
+                    p.choice = new Choice();
+                    p.choice.type = Types.BRANCH;
+                    p.isChoiceSet = true;
+                }
 
                 for (sessionPiParser.BranchContext pb : bc) {
                     if (!sessionType.isEmpty()) {
                         allSessionTypes.put(name, branchMap.get(pb.IDENTIFIER().getText()));
-                        p = iterateChildren(pb, name, p);
-                        if(p.isChoiceSet ){
-                            p.choice.addProcess(pb.IDENTIFIER().getText(), p.createListCopy(p.commList));
-                            p.commList.clear();
+                        p = iterateChildren(pb, name, p, red);
+                        if(red) {
+                            if (p.isChoiceSet) {
+                                p.choice.addProcess(pb.IDENTIFIER().getText(), p.createListCopy(p.commList));
+                                p.commList.clear();
+                            }
                         }
 
                     }
                 }
                 allSessionTypes.put(name, sessionType);
-
-                p.currentProcessNode.addSubprocess(p.choice);
-                p.isChoiceSet = false;
-                /* */
+                if(red) {
+                    p.currentProcessNode.addSubprocess(p.choice);
+                    p.isChoiceSet = false;
+                    /* */
+                }
             }
             break;
 
             case "InactionContext": {
-                p.currentScopeNode.addProcessNode(p.currentProcessNode);
+                if(red)
+                 p.currentScopeNode.addProcessNode(p.currentProcessNode);
             }
             break;
         }
@@ -363,12 +380,12 @@ public class Utils {
         return mssg;
     }
 
-    private static Pointers iterateChildren(ParseTree c, String name, Pointers p) throws Exception {
+    private static Pointers iterateChildren(ParseTree c, String name, Pointers p, boolean red) throws Exception {
         int childCount = c.getChildCount();
         int i = 0;
         Pointers  newP = null;
         while (i < childCount) {
-            newP = typeCheckManager(c.getChild(i), name, p);
+            newP = typeCheckManager(c.getChild(i), name, p, red);
             i++;
         }
         return newP;
