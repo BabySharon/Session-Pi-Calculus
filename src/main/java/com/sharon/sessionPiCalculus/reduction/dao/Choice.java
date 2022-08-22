@@ -9,6 +9,10 @@ import java.util.Map;
 public class Choice extends SubProcess {
     Map<String, List<Communication>> process = new HashMap<>();
 
+    public Map<String, List<Communication>> getProcess() {
+        return process;
+    }
+
     public void addProcess(String label, List<Communication> commList){
         process.put(label, commList);
     }

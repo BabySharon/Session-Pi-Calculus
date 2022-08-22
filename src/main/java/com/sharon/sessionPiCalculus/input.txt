@@ -3,4 +3,7 @@ new x y  P[x branch {l1:x<m>, l2:x(2).x<true>}.x<b>.zero] | Q[ y select l2.(x<1>
 
 new x y P[x<1>.x(a).zero] | Q[y(b).y<true>.zero]
 
+new x y P[ new a b C[] | D[] ] | Q[]
+new x y new a b P[ C[] | d[] | Q[] ]
+
 

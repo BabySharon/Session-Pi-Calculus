@@ -1,6 +1,7 @@
 package com.sharon.sessionPiCalculus.typing.antlr;
 
 import com.sharon.sessionPiCalculus.InputDao;
+import com.sharon.sessionPiCalculus.reduction.ReductionUtils;
 import com.sharon.sessionPiCalculus.reduction.dao.*;
 import com.sharon.sessionPiCalculus.typing.dao.BasicType;
 import com.sharon.sessionPiCalculus.typing.dao.CompositeType;
@@ -43,12 +44,10 @@ public class Utils {
         allTypingContexts.clear();
         processVariableMap.clear();
         if(red)
-            semantics(point.sn);
+            ReductionUtils.semantics(point.sn);
         return tree;
     }
 
-    private static void semantics(ScopeNode sn) {
-    }
 
     public static String getStringFromSet(Collection<String> values) {
         StringBuilder s = new StringBuilder("");
@@ -87,11 +86,10 @@ public class Utils {
                     if (p.currentScopeNode == null) {
                         p.currentScopeNode = new ScopeNode();
                         p.sn = p.currentScopeNode;
-                        p.currentScopeNode.setChannel1(channels.get(0));
-                        p.currentScopeNode.setChannel2(channels.get(1));
+                        p.currentScopeNode.setChannels(channels);
                     } else {
-                        ScopeNode newNode = new ScopeNode(channels.get(0), channels.get(1));
-                        p.currentScopeNode.addScopeNode(newNode);
+                        ScopeNode newNode = new ScopeNode(channels);
+                        p.currentProcessNode.setScopeNode(newNode);
                         p.currentScopeNode = newNode;
                     }
                 }
