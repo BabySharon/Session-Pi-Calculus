@@ -1,9 +1,8 @@
 new x y  P[x branch {l1:x<m>, l2:x(2).x<true>}.x<b>.zero] | Q[ y select l2.(x<1>.x(z)).y(a).zero]
 
-
+x branch{l1: x<m>,l2: x(2).x<true>}.x<b>.zeroy selecty<1>.y(z).y(a).zero
 new x y P[x<1>.x(a).zero] | Q[y(b).y<true>.zero]
 
-new x y P[ new a b C[] | D[] ] | Q[]
-new x y new a b P[ C[] | d[] | Q[] ]
+new x y  P[new a e R[a(TRUE).a(b).zero] | S[e(TRUE).e(b).zero]] | Q[ y(q).y<TRUE>.zero]
 
 

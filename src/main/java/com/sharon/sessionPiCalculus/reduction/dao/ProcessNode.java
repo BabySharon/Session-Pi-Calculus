@@ -8,6 +8,19 @@ public class ProcessNode {
     private boolean underCheck;
     private List<SubProcess> subProcesses = new ArrayList<>();
     ScopeNode scopeNode;
+    private ScopeNode parentScopeNode;
+
+    public ProcessNode() {
+
+    }
+
+    public ScopeNode getParentScopeNode() {
+        return parentScopeNode;
+    }
+
+    public void setParentScopeNode(ScopeNode parentScopeNode) {
+        this.parentScopeNode = parentScopeNode;
+    }
 
     public ProcessNode(String name) {
         this.name = name;
@@ -23,10 +36,6 @@ public class ProcessNode {
 
     public void setUnderCheck(boolean underCheck) {
         this.underCheck = underCheck;
-    }
-
-    public ProcessNode() {
-
     }
 
     public String getName() {
@@ -48,5 +57,16 @@ public class ProcessNode {
     public void setScopeNode(ScopeNode scopeNode) {
         this.scopeNode = scopeNode;
     }
+
+    public String getString(String channel) {
+        StringBuilder sb = new StringBuilder("");
+        for (SubProcess sp: subProcesses) {
+            sb.append(sp.getString(channel));
+            sb.append(".");
+        }
+        sb.append("zero");
+        return sb.toString();
+    }
+
 
 }

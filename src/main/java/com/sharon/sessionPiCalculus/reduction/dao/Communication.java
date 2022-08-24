@@ -4,6 +4,7 @@ import com.sharon.sessionPiCalculus.typing.dao.Types;
 
 import java.util.HashMap;
 import java.util.Map;
+
 //TODO sending expressions
 public class Communication extends SubProcess {
     private String name;
@@ -44,4 +45,29 @@ public class Communication extends SubProcess {
     public StdType getStdType() {
         return stdType;
     }
+
+    @Override
+    public String getString(String channel) {
+        StringBuilder sb = new StringBuilder("");
+        sb.append(channel);
+        sb = fillParameters(sb, type);
+        return sb.toString();
+    }
+
+    private StringBuilder fillParameters(StringBuilder sb, Types type) {
+        if (type.equals(Types.RECEIVE))
+            sb.append("(");
+        else
+            sb.append("<");
+        if (value != null)
+            sb.append(value);
+        else
+            sb.append(name);
+        if (type.equals(Types.RECEIVE))
+            sb.append(")");
+        else
+            sb.append(">");
+        return sb;
+    }
+
 }

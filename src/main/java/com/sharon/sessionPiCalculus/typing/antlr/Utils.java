@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class Utils {
     public static Map<String, Map<String, String>> allTypingContexts = new HashMap<>();
     public static Map<String, List<BasicType>> allSessionTypes = new HashMap<>();
-    public static Map<String, String> processVariableMap = new HashMap<>();
+    public static Map<String, List<String>> processVariableMap = new HashMap<>();
 
     public static ParseTree createVisitor(String input, InputDao inputDao, String name, boolean red) throws Exception {
         ANTLRInputStream inputStream = new ANTLRInputStream(input);
@@ -43,7 +43,7 @@ public class Utils {
         allSessionTypes.clear();
         allTypingContexts.clear();
         processVariableMap.clear();
-        if(red)
+        if (red)
             ReductionUtils.semantics(point.sn);
         return tree;
     }
@@ -69,7 +69,7 @@ public class Utils {
                         .collect(Collectors.toList());
                 if (coVariables.size() == processes.size()) {
                     for (int i = 0; i < processes.size(); i++) {
-                        processVariableMap.put(processes.get(i), coVariables.get(i));
+                        putToProcessVariableMap(processes.get(i), Arrays.asList(coVariables.get(i)));
                     }
                 } else
                     System.out.println("Error in defining session variables");
@@ -79,7 +79,7 @@ public class Utils {
 
             case "ScopeSessionContext": {
                 System.out.println("Rule: RuleT-Res");
-                if(red) {
+                if (red) {
                     /* For Reduction */
                     sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
                     List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
@@ -87,10 +87,19 @@ public class Utils {
                         p.currentScopeNode = new ScopeNode();
                         p.sn = p.currentScopeNode;
                         p.currentScopeNode.setChannels(channels);
+                        p.currentScopeNode.setRoot(true);
                     } else {
+                        sessionPiParser.SequentialProcessContext parent = (sessionPiParser.SequentialProcessContext) ((sessionPiParser.ScopeSessionContext)c)
+                                .getParent().getParent();
+                        List<String> parentChannels = processVariableMap.get(parent.CAPS().getText());
+                        putToProcessVariableMap(name, parentChannels);
                         ScopeNode newNode = new ScopeNode(channels);
                         p.currentProcessNode.setScopeNode(newNode);
+                        p.currentScopeNode.addProcessNode(p.currentProcessNode);
+                        p.currentProcessNode.setParentScopeNode(p.currentScopeNode);
+                        newNode.setParentProcessNode(p.currentProcessNode);
                         p.currentScopeNode = newNode;
+                        p.currentScopeNode.setRoot(false);
                     }
                 }
                 /* */
@@ -119,10 +128,11 @@ public class Utils {
 
             case "SequentialProcessContext": {
                 String processName = ((sessionPiParser.SequentialProcessContext) c).CAPS().getText();
-                if(red) {
+                if (red) {
                     /* For Reduction */
                     p.currentProcessNode = new ProcessNode();
                     p.currentProcessNode.setName(processName);
+                    p.currentProcessNode.setParentScopeNode(p.currentScopeNode);
                     /* */
                 }
                 iterateChildren(c, processName, p, red);
@@ -161,7 +171,7 @@ public class Utils {
                         System.out.println("Error: " + sendType.getTypeString() + " expected. Got " + t);
 
                 }
-                if(red) {
+                if (red) {
                     /* For Reduction */
                     comm = m.getComm();
                     comm.type = Types.SEND;
@@ -204,7 +214,7 @@ public class Utils {
                         System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + t);
 
                 }
-                if(red){
+                if (red) {
                     /* Reduction */
                     comm = m.getComm();
                     comm.type = Types.RECEIVE;
@@ -242,7 +252,7 @@ public class Utils {
                 if (!res)
                     System.out.println(errorMessage);
 
-                if(red) {
+                if (red) {
                     /* For Reduction */
                     p.choice = new Choice();
                     p.isChoiceSet = true;
@@ -253,7 +263,7 @@ public class Utils {
                 p = iterateChildren(spc, name, p, red);
                 allSessionTypes.put(name, sessionType);
 
-                if(red) {
+                if (red) {
                     p.choice.addProcess(label, p.createListCopy(p.commList));
                     p.currentProcessNode.addSubprocess(p.choice);
                     p.isChoiceSet = false;
@@ -295,7 +305,7 @@ public class Utils {
                 bc = bpc.branch();
                 if (res == false)
                     System.out.println(errorMessage);
-                if(red) {
+                if (red) {
                     /* For Reduction */
                     p.choice = new Choice();
                     p.choice.type = Types.BRANCH;
@@ -306,7 +316,7 @@ public class Utils {
                     if (!sessionType.isEmpty()) {
                         allSessionTypes.put(name, branchMap.get(pb.IDENTIFIER().getText()));
                         p = iterateChildren(pb, name, p, red);
-                        if(red) {
+                        if (red) {
                             if (p.isChoiceSet) {
                                 p.choice.addProcess(pb.IDENTIFIER().getText(), p.createListCopy(p.commList));
                                 p.commList.clear();
@@ -316,7 +326,7 @@ public class Utils {
                     }
                 }
                 allSessionTypes.put(name, sessionType);
-                if(red) {
+                if (red) {
                     p.currentProcessNode.addSubprocess(p.choice);
                     p.isChoiceSet = false;
                     /* */
@@ -325,12 +335,24 @@ public class Utils {
             break;
 
             case "InactionContext": {
-                if(red)
-                 p.currentScopeNode.addProcessNode(p.currentProcessNode);
+                if (red)
+                    p.currentScopeNode.addProcessNode(p.currentProcessNode);
             }
             break;
         }
+        if(p.currentScopeNode.getProcessNodeList().size() == 2 && p.currentScopeNode.isRoot() == false)
+            p.currentScopeNode = p.currentScopeNode.getParentProcessNode().getParentScopeNode();
         return p;
+    }
+
+    private static void putToProcessVariableMap(String name, List<String> channel) {
+        if (processVariableMap.get(name) == null) {
+            processVariableMap.put(name, new ArrayList<>(channel));
+        } else {
+            List<String> channels = processVariableMap.get(name);
+            channels.addAll(channel);
+            processVariableMap.put(name, channels);
+        }
     }
 
     private static Message checkBaseType(BasicType type, sessionPiParser.PayloadContext payload, Map<String,
@@ -343,7 +365,7 @@ public class Utils {
                 /* Single exp context can be bool or INT */
                 List<ParseTree> exprContexts = ((sessionPiParser.ExprPayloadContext) payload).expr().children;
                 if (exprContexts.size() == 1) {
-                    if (!exprContexts.get(0).toString().equals("BoolContext{}")) {
+                    if (!exprContexts.get(0).toString().equals("BoolContext")) {
                         t = "Int";
                         comm.setValue(((sessionPiParser.ExprPayloadContext) payload).expr().getText());
                         comm.setStdType(StdType.INT);
@@ -381,7 +403,7 @@ public class Utils {
     private static Pointers iterateChildren(ParseTree c, String name, Pointers p, boolean red) throws Exception {
         int childCount = c.getChildCount();
         int i = 0;
-        Pointers  newP = null;
+        Pointers newP = null;
         while (i < childCount) {
             newP = typeCheckManager(c.getChild(i), name, p, red);
             i++;
@@ -391,7 +413,7 @@ public class Utils {
 
     private static boolean checkChannel(String name, TerminalNode node) {
         if (processVariableMap.containsKey(name))
-            return processVariableMap.get(name).equals(node.getText());
+            return processVariableMap.get(name).contains(node.getText());
         else
             System.out.println("Invalid process name");
         return false;

@@ -15,16 +15,8 @@ public class ReductionUtils {
 
     /* */
     public static void semantics(ScopeNode sn) {
-        scopeExpansion(sn);
-        List<Types> startingTypes = Arrays.asList(Types.SEND, Types.SELECT);
-        ProcessNode first = sn.getProcessNodeList().get(0);
-        ProcessNode second = sn.getProcessNodeList().get(1);
-        if (startingTypes.contains(first.getSubProcesses().get(0).type)) {
-
-        } else {
-//            commutativeRule()
-        }
-
+        sn = scopeExpansion(sn);
+        System.out.println(sn.getString());
 
     }
 
@@ -35,37 +27,39 @@ public class ReductionUtils {
         for (ProcessNode process : processNodes) {
             if (process.getScopeNode() != null) {
                 // Scope restriction inside a process
-               List<String> channels = process.getScopeNode().getChannels();
+                List<String> channels = process.getScopeNode().getChannels();
                 process.setUnderCheck(true);
-                if(ifInFreeVariables(channels, processNodes) == false) {
-                // channels note in free variables
+                if (ifInFreeVariables(channels, processNodes) == false) {
+                    // channels note in free variables
                     List<String> presentChannels = sn.getChannels();
                     presentChannels.addAll(process.getScopeNode().getChannels());
                     sn.setChannels(presentChannels);
-                    restructureList.addAll(process.getScopeNode().getProcessNodeList())
+                    restructureList.addAll(process.getScopeNode().getProcessNodeList());
                 }
             }
         }
         List<ProcessNode> list = new LinkedList<>();
-        for (ProcessNode pn: sn.getProcessNodeList()) {
-            if(pn.isUnderCheck())
+        for (ProcessNode pn : sn.getProcessNodeList()) {
+            if (pn.isUnderCheck()) {
                 list.addAll(restructureList);
+            }
             else
                 list.add(pn);
         }
+        sn.setProcessNodeList(list);
         return sn;
     }
 
     private static boolean ifInFreeVariables(List<String> channels, List<ProcessNode> processNodes) {
         List<String> freeVariables = getFreeVariables(processNodes);
-        if(freeVariables.containsAll(channels))
+        if (freeVariables.containsAll(channels))
             return true;
         else
             return false;
     }
 
     private static List<String> getFreeVariables(List<ProcessNode> processNodes) {
-        List<String> freeVariables = getFreeVariables(processNodes);
+        List<String> freeVariables = new ArrayList<>();
         for (ProcessNode process : processNodes) {
             if (process.isUnderCheck() == false) {
                 //Subprocesses and scopeNode
@@ -75,20 +69,31 @@ public class ReductionUtils {
                         Choice subProcess = (Choice) p;
                         Map<String, List<Communication>> map = subProcess.getProcess();
                         for (String key : map.keySet()) {
-                            List<Communication> commList = map.get(key);
-                            for (Communication c : commList) {
-                                if (c.getName() != null && c.type != Types.RECEIVE)
+                            for (Communication c : ((Choice) p).getProcess().get(key)) {
+                                if (isFreeVariable(c))
                                     freeVariables.add(c.getName());
                             }
                         }
+                    } else {
+                        Communication c = (Communication) p;
+                        if (isFreeVariable(c))
+                            freeVariables.add(c.getName());
                     }
-                }
-                ScopeNode scopeNode = process.getScopeNode();
-                if (scopeNode != null) {
-                    getFreeVariables(scopeNode.getProcessNodeList());
+                    ScopeNode scopeNode = process.getScopeNode();
+                    if (scopeNode != null) {
+                        getFreeVariables(scopeNode.getProcessNodeList());
+                    }
                 }
             }
         }
         return freeVariables;
     }
+
+    private static boolean isFreeVariable(Communication c) {
+        if (c.getName() != null && c.type != Types.RECEIVE)
+            return true;
+        else
+            return false;
+    }
+
 }
