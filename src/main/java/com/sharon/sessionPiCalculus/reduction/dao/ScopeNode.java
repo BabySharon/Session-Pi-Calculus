@@ -1,5 +1,7 @@
 package com.sharon.sessionPiCalculus.reduction.dao;
 
+import com.sharon.sessionPiCalculus.reduction.ReductionStep;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +12,7 @@ public class ScopeNode {
     List<ProcessNode> processNodeList = new LinkedList<>();
     private ProcessNode parentProcessNode;
     private boolean isRoot;
+    List<ReductionStep> steps = new ArrayList<>();
 
     public ScopeNode() {
 
@@ -78,9 +81,10 @@ public class ScopeNode {
             if (pn.getScopeNode() == null) {
                 str.append(pn.getString(pn.getEndpoint()));
             }
-            str.append(" | ");
+            if(i != processNodes.size()-1)
+                str.append(" | ");
         }
-        str.deleteCharAt(str.length()-2);
+//        str.deleteCharAt(str.length()-2);
         str.append(")");
         return str.toString();
     }
@@ -102,6 +106,10 @@ public class ScopeNode {
             }
         }
         return counterpart;
+    }
+
+    public void addStep(ReductionStep step){
+        steps.add(step);
     }
 
 }

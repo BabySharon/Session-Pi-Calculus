@@ -55,6 +55,10 @@ public class ProcessNode {
         return subProcesses;
     }
 
+    public void setSubProcesses(List<SubProcess> subProcesses) {
+        this.subProcesses = subProcesses;
+    }
+
     public void addSubprocess(SubProcess sp) {
         subProcesses.add(sp);
     }
@@ -73,6 +77,7 @@ public class ProcessNode {
             sb.append(sp.getString(channel));
             sb.append(".");
         }
+        sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
 

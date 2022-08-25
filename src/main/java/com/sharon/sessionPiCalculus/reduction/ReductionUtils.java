@@ -7,19 +7,62 @@ import java.util.*;
 
 public class ReductionUtils {
     // TODO Add channel to communication
+    // TODO replication
     // TODO now only processes inside a scope restriction considered
     // TODO Sending channel and removing from typing context
 
     /* Method */
     /* First try scope expansion
-
+    /* Inaction
     /* */
     public static void semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
         List<ReductionStep> steps = new ArrayList<>();
-        String otherEnd = "";
-        sn = inactionCongruence(sn, steps);
+        sn = inactionCongruence(sn);
         sn = scopeExpansion(sn, steps);
         System.out.println(sn.getString());
+        while (sn.getProcessNodeList().size() > 1) // Until there is a single inaction left
+            sn = communicate(sn);
+    }
+
+    private static ScopeNode communicate(ScopeNode sn) {
+        sn = commutativity(sn);
+        System.out.println(sn.getString());
+        ProcessNode start = sn.getProcessNodeList().get(0);
+        ProcessNode end = sn.getProcessNodeList().get(1);
+        if (start.getSubProcesses().get(0).type == Types.SELECT && end.getSubProcesses().get(0).type == Types.BRANCH) {
+            Choice c = (Choice) start.getSubProcesses().get(0);
+            String label = c.getProcess().keySet().iterator().next();
+            start.setSubProcesses(communicateChoice(start, c, label));
+            end.setSubProcesses(communicateChoice(end, (Choice) end.getSubProcesses().get(0), label));
+            sn.addStep(new ReductionStep(null, SemanticsRule.CASE, null, sn.getString()));
+        }
+        System.out.println(sn.getString());
+        sn = commutativity(sn);
+        start = sn.getProcessNodeList().get(0);
+        end = sn.getProcessNodeList().get(1);
+        if (start.getSubProcesses().get(0).type == Types.SEND && end.getSubProcesses().get(0).type ==Types.RECEIVE){
+            start.getSubProcesses().remove(0);
+            end.getSubProcesses().remove(0);
+            sn.addStep(new ReductionStep(null, SemanticsRule.COMM, null, sn.getString()));
+            if(start.getSubProcesses().get(0).type == Types.END || end.getSubProcesses().get(0).type == Types.END)
+                sn = inactionCongruence(sn);
+        }
+        System.out.println(sn.getString());
+        return sn;
+    }
+
+    private static List<SubProcess> communicateChoice(ProcessNode pn, Choice c, String label) {
+        List<SubProcess> newList = new LinkedList<>();
+        List<Communication> commList = c.getProcess().get(label);
+        newList.addAll(commList);
+        List<SubProcess> subProcesses = pn.getSubProcesses();
+        subProcesses.remove(0);
+        newList.addAll(subProcesses);
+        return newList;
+    }
+
+    private static ScopeNode commutativity(ScopeNode sn) {
+        String otherEnd = "";
         List<ProcessNode> processNodes = sn.getProcessNodeList();
         ProcessNode starter = processNodes.get(0);
         List<ProcessNode> processNodesToCheck = processNodes.subList(1, processNodes.size());
@@ -35,17 +78,17 @@ public class ReductionUtils {
                 break;
             }
         }
-        steps.add(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
-        System.out.println(sn.getString());
+        sn.addStep(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
+        return sn;
     }
 
-    private static ScopeNode inactionCongruence(ScopeNode sn, List<ReductionStep> steps) {
+    private static ScopeNode inactionCongruence(ScopeNode sn) {
         List<ProcessNode> processNodes = sn.getProcessNodeList();
         String prevNode;
         for (int i = 0; i < processNodes.size(); i++) {
             ProcessNode pn = processNodes.get(i);
             if (pn.getScopeNode() != null) {
-                ScopeNode scopeNode = inactionCongruence(pn.getScopeNode(), steps);
+                ScopeNode scopeNode = inactionCongruence(pn.getScopeNode());
                 pn.setScopeNode(scopeNode);
             }
             if (pn.getSubProcesses().size() == 1 & pn.getSubProcesses().get(0).type == Types.END) {
@@ -56,7 +99,7 @@ public class ReductionUtils {
                 processNodes.remove(pn);
                 sn.setProcessNodeList(processNodes);
                 pn = null;
-                steps.add(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
+                sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
                         SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
             }
         }
@@ -75,7 +118,7 @@ public class ReductionUtils {
                 process.setUnderCheck(true);
                 if (!ifInFreeVariables(channels, processNodes)) {
                     String judgement = channels.get(0) + "," + channels.get(1) + " not in fv(" + processNodes.get(0).getName();
-                    steps.add(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
+                    sn.addStep(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
                             SemanticsRule.ScopeExpansion, sn.getString()));
                     // channels note in free variables
                     List<Session> presentChannels = sn.getChannels();
