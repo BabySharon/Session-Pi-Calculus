@@ -6,32 +6,79 @@ import com.sharon.sessionPiCalculus.typing.dao.Types;
 import java.util.*;
 
 public class ReductionUtils {
-    ReductionStep steps = new ReductionStep();
-
+    // TODO Add channel to communication
     // TODO now only processes inside a scope restriction considered
+    // TODO Sending channel and removing from typing context
 
     /* Method */
     /* First try scope expansion
 
     /* */
-    public static void semantics(ScopeNode sn) {
-        sn = scopeExpansion(sn);
+    public static void semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
+        List<ReductionStep> steps = new ArrayList<>();
+        String otherEnd = "";
+        sn = inactionCongruence(sn, steps);
+        sn = scopeExpansion(sn, steps);
         System.out.println(sn.getString());
+        List<ProcessNode> processNodes = sn.getProcessNodeList();
+        ProcessNode starter = processNodes.get(0);
+        List<ProcessNode> processNodesToCheck = processNodes.subList(1, processNodes.size());
+        if (Arrays.asList(Types.SELECT, Types.SEND).contains(starter.getSubProcesses().get(0).type) == false) {
+            otherEnd = sn.getCounterpart(starter.getEndpoint());
+        }
+        for (ProcessNode pn : processNodesToCheck) {
+            if (pn.getEndpoint().equals(otherEnd) && pn.getSubProcesses().size() != 0 && pn.getSubProcesses().get(0)
+                    .getString("") != "zero") {
+                processNodes.remove(pn);
+                processNodes.add(0, pn);
+                sn.setProcessNodeList(processNodes);
+                break;
+            }
+        }
+        steps.add(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
+        System.out.println(sn.getString());
+    }
 
+    private static ScopeNode inactionCongruence(ScopeNode sn, List<ReductionStep> steps) {
+        List<ProcessNode> processNodes = sn.getProcessNodeList();
+        String prevNode;
+        for (int i = 0; i < processNodes.size(); i++) {
+            ProcessNode pn = processNodes.get(i);
+            if (pn.getScopeNode() != null) {
+                ScopeNode scopeNode = inactionCongruence(pn.getScopeNode(), steps);
+                pn.setScopeNode(scopeNode);
+            }
+            if (pn.getSubProcesses().size() == 1 & pn.getSubProcesses().get(0).type == Types.END) {
+                if (i == 0)
+                    prevNode = processNodes.get(1).getName();
+                else
+                    prevNode = processNodes.get(i - 1).getName();
+                processNodes.remove(pn);
+                sn.setProcessNodeList(processNodes);
+                pn = null;
+                steps.add(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
+                        SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
+            }
+        }
+        return sn;
     }
 
     /* Only one level of scope expansion considered */
-    private static ScopeNode scopeExpansion(ScopeNode sn) {
+    private static ScopeNode scopeExpansion(ScopeNode sn, List<ReductionStep> steps) {
         List<ProcessNode> processNodes = sn.getProcessNodeList();
         List<ProcessNode> restructureList = new LinkedList<>();
         for (ProcessNode process : processNodes) {
             if (process.getScopeNode() != null) {
                 // Scope restriction inside a process
-                List<String> channels = process.getScopeNode().getChannels();
+                // Expanding scope will only have one session object
+                List<String> channels = process.getScopeNode().getChannels().get(0).getChannels();
                 process.setUnderCheck(true);
-                if (ifInFreeVariables(channels, processNodes) == false) {
+                if (!ifInFreeVariables(channels, processNodes)) {
+                    String judgement = channels.get(0) + "," + channels.get(1) + " not in fv(" + processNodes.get(0).getName();
+                    steps.add(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
+                            SemanticsRule.ScopeExpansion, sn.getString()));
                     // channels note in free variables
-                    List<String> presentChannels = sn.getChannels();
+                    List<Session> presentChannels = sn.getChannels();
                     presentChannels.addAll(process.getScopeNode().getChannels());
                     sn.setChannels(presentChannels);
                     restructureList.addAll(process.getScopeNode().getProcessNodeList());
@@ -42,8 +89,8 @@ public class ReductionUtils {
         for (ProcessNode pn : sn.getProcessNodeList()) {
             if (pn.isUnderCheck()) {
                 list.addAll(restructureList);
-            }
-            else
+                pn = null; // Trying to deallocate memory
+            } else
                 list.add(pn);
         }
         sn.setProcessNodeList(list);

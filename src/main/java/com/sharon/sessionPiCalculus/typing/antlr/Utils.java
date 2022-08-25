@@ -42,9 +42,9 @@ public class Utils {
         Pointers point = typeCheckManager(tree, null, new Pointers(), red);
         allSessionTypes.clear();
         allTypingContexts.clear();
-        processVariableMap.clear();
         if (red)
-            ReductionUtils.semantics(point.sn);
+            ReductionUtils.semantics(point.sn, processVariableMap);
+        processVariableMap.clear();
         return tree;
     }
 
@@ -84,16 +84,15 @@ public class Utils {
                     sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
                     List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
                     if (p.currentScopeNode == null) {
-                        p.currentScopeNode = new ScopeNode();
+                        p.currentScopeNode = new ScopeNode(new Session(channels.get(0), channels.get(1)));
                         p.sn = p.currentScopeNode;
-                        p.currentScopeNode.setChannels(channels);
                         p.currentScopeNode.setRoot(true);
                     } else {
                         sessionPiParser.SequentialProcessContext parent = (sessionPiParser.SequentialProcessContext) ((sessionPiParser.ScopeSessionContext)c)
                                 .getParent().getParent();
                         List<String> parentChannels = processVariableMap.get(parent.CAPS().getText());
                         putToProcessVariableMap(name, parentChannels);
-                        ScopeNode newNode = new ScopeNode(channels);
+                        ScopeNode newNode = new ScopeNode(new Session(channels.get(0), channels.get(1)));
                         p.currentProcessNode.setScopeNode(newNode);
                         p.currentScopeNode.addProcessNode(p.currentProcessNode);
                         p.currentProcessNode.setParentScopeNode(p.currentScopeNode);
@@ -132,6 +131,7 @@ public class Utils {
                     /* For Reduction */
                     p.currentProcessNode = new ProcessNode();
                     p.currentProcessNode.setName(processName);
+                    p.currentProcessNode.addEndPoint(p.currentScopeNode.removeChannelString());
                     p.currentProcessNode.setParentScopeNode(p.currentScopeNode);
                     /* */
                 }
@@ -335,8 +335,10 @@ public class Utils {
             break;
 
             case "InactionContext": {
-                if (red)
+                if (red) {
+                    p.currentProcessNode.addSubprocess(new Inaction());
                     p.currentScopeNode.addProcessNode(p.currentProcessNode);
+                }
             }
             break;
         }

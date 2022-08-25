@@ -9,6 +9,7 @@ public class ProcessNode {
     private List<SubProcess> subProcesses = new ArrayList<>();
     ScopeNode scopeNode;
     private ScopeNode parentScopeNode;
+    private List<String> endPoints = new ArrayList<>();
 
     public ProcessNode() {
 
@@ -24,6 +25,14 @@ public class ProcessNode {
 
     public ProcessNode(String name) {
         this.name = name;
+    }
+
+    public void addEndPoint(String end){
+        endPoints.add(end);
+    }
+
+    public String getEndpoint(){
+        return endPoints.get(0);
     }
 
     public void setName(String name) {
@@ -64,7 +73,6 @@ public class ProcessNode {
             sb.append(sp.getString(channel));
             sb.append(".");
         }
-        sb.append("zero");
         return sb.toString();
     }
 

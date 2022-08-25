@@ -5,6 +5,9 @@ public enum SemanticsRule {
     PAR,
     COMM,
     STRUCT,
+    ScopeExpansion,
+    Commutativity,
+    Inaction,
     CASE
 
 }

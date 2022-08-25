@@ -5,13 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ScopeNode {
-    private List<String> channels;
+    private List<Session> channels = new ArrayList<>();
+    private List<String> channelStrings = new ArrayList<>();
     List<ProcessNode> processNodeList = new LinkedList<>();
     private ProcessNode parentProcessNode;
     private boolean isRoot;
 
     public ScopeNode() {
 
+    }
+
+    public ScopeNode(Session channels) {
+        this.addChannels(channels);
+        this.channelStrings = channels.getChannels();
     }
 
     public boolean isRoot() {
@@ -30,20 +36,20 @@ public class ScopeNode {
         this.parentProcessNode = parentProcessNode;
     }
 
-    public List<String> getChannels() {
+    public List<Session> getChannels() {
         return channels;
     }
 
-    public void setChannels(List<String> channels) {
+    public void setChannels(List<Session> channels) {
         this.channels = channels;
+    }
+
+    public void addChannels(Session session) {
+        channels.add(session);
     }
 
     public void setProcessNodeList(List<ProcessNode> processNodeList) {
         this.processNodeList = processNodeList;
-    }
-
-    public ScopeNode(List<String> channels) {
-        this.channels = channels;
     }
 
     public List<ProcessNode> getProcessNodeList() {
@@ -61,21 +67,41 @@ public class ScopeNode {
 
     public String getString() {
         StringBuilder str = new StringBuilder("");
-        for (int i = 0; i < channels.size(); i+=2) {
-            str.append("new ").append(channels.get(i)).append(" "+channels.get(i+1)+" " );
+        for (int i = 0; i < channels.size(); i++) {
+            List<String> channelStrings = channels.get(i).getChannels();
+            str.append("new ").append(channelStrings.get(0)).append(" "+channelStrings.get(1)+" " );
         }
         str.append("(");
         List<ProcessNode> processNodes = getProcessNodeList();
         for (int i = 0; i < processNodes.size(); i++) {
             ProcessNode pn = processNodes.get(i);
             if (pn.getScopeNode() == null) {
-                str.append(pn.getString(channels.get(i)));
+                str.append(pn.getString(pn.getEndpoint()));
             }
             str.append(" | ");
         }
         str.deleteCharAt(str.length()-2);
         str.append(")");
         return str.toString();
+    }
+
+    public String removeChannelString() {
+        String s = "";
+        if(!(channelStrings.isEmpty())) {
+            s = channelStrings.remove(0);
+        }
+        return s;
+    }
+
+    public String getCounterpart(String endpoint){
+        String counterpart = null;
+        for (Session s: channels) {
+            if(s.getChannels().contains(endpoint)) {
+                counterpart = s.getCounterpart(endpoint);
+                break;
+            }
+        }
+        return counterpart;
     }
 
 }
