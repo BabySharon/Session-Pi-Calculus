@@ -1,6 +1,7 @@
 package com.sharon.sessionPiCalculus.typing.antlr;
 
 import com.sharon.sessionPiCalculus.InputDao;
+import com.sharon.sessionPiCalculus.reduction.ReductionStep;
 import com.sharon.sessionPiCalculus.reduction.ReductionUtils;
 import com.sharon.sessionPiCalculus.reduction.dao.*;
 import com.sharon.sessionPiCalculus.typing.dao.BasicType;
@@ -15,6 +16,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.*;
 import java.util.stream.Collectors;
 //TODO Check duality - in front-end
+// IF TYPE ERROR -  don't do reduction and show errors
 // TODO ONLY single parameter in send and receive - no expressions
 //TODO Type to token code mapping
 //TODO add exceptions and handle them, if process names are not found in map
@@ -30,7 +32,7 @@ public class Utils {
     public static Map<String, List<BasicType>> allSessionTypes = new HashMap<>();
     public static Map<String, List<String>> processVariableMap = new HashMap<>();
 
-    public static ParseTree createVisitor(String input, InputDao inputDao, String name, boolean red) throws Exception {
+    public static List<ReductionStep> createVisitor(String input, InputDao inputDao, String name, boolean red) throws Exception {
         ANTLRInputStream inputStream = new ANTLRInputStream(input);
         sessionPiLexer lexer = new sessionPiLexer(inputStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -42,10 +44,12 @@ public class Utils {
         Pointers point = typeCheckManager(tree, null, new Pointers(), red);
         allSessionTypes.clear();
         allTypingContexts.clear();
-        if (red)
-            ReductionUtils.semantics(point.sn, processVariableMap);
+        ScopeNode sn = null;
+        if (red) {
+             sn = ReductionUtils.semantics(point.sn, processVariableMap);
+        }
         processVariableMap.clear();
-        return tree;
+        return sn.getSteps();
     }
 
 

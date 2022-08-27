@@ -112,4 +112,7 @@ public class ScopeNode {
         steps.add(step);
     }
 
+    public List<ReductionStep> getSteps() {
+        return steps;
+    }
 }

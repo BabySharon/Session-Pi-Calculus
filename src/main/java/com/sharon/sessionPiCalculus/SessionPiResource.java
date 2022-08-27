@@ -1,10 +1,11 @@
 package com.sharon.sessionPiCalculus;
 
+import com.sharon.sessionPiCalculus.reduction.ReductionStep;
 import com.sharon.sessionPiCalculus.typing.antlr.Utils;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/type-check")
 @Produces(MediaType.APPLICATION_JSON)
@@ -12,21 +13,24 @@ import javax.ws.rs.core.MediaType;
 public class SessionPiResource {
 
     @POST
-    public String postInputTypeCheck(InputDao input, @QueryParam("red")boolean red){
+    public String postInputTypeCheck(InputDao input, @QueryParam("red")boolean red) {
+        List<ReductionStep> tree = null;
         try {
             System.out.println(input.getInput());
             System.out.println(input.getProcessList().get(0).getName());
 //            System.out.println(input.getInput());
 //            System.out.println(input.getProcessList().get(0).getTypingContextList().get("y"));
 //            InputDao.sessionVariableObjects = input.getSessionVariables();
-            ParseTree tree = Utils.createVisitor(input.getInput(), input, null, red);
-        }
-        catch (Exception e){
+            tree = Utils.createVisitor(input.getInput(), input, null, red);
+            for (ReductionStep step : tree) {
+                System.out.println(step.getResult());
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return "success";
+        return "tree";
     }
 
-}
+    }
 
 //TODO Give proper response object

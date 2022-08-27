@@ -14,4 +14,8 @@ public class ReductionStep {
         this.ruleDescription = ruleDescription;
         this.result = result;
     }
+
+    public String getResult() {
+        return result;
+    }
 }

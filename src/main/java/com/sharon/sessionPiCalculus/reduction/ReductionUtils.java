@@ -15,18 +15,19 @@ public class ReductionUtils {
     /* First try scope expansion
     /* Inaction
     /* */
-    public static void semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
+    public static ScopeNode semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
         List<ReductionStep> steps = new ArrayList<>();
         sn = inactionCongruence(sn);
         sn = scopeExpansion(sn, steps);
-        System.out.println(sn.getString());
+//        System.out.println(sn.getString());
         while (sn.getProcessNodeList().size() > 1) // Until there is a single inaction left
             sn = communicate(sn);
+        return sn;
     }
 
     private static ScopeNode communicate(ScopeNode sn) {
         sn = commutativity(sn);
-        System.out.println(sn.getString());
+//        System.out.println(sn.getString());
         ProcessNode start = sn.getProcessNodeList().get(0);
         ProcessNode end = sn.getProcessNodeList().get(1);
         if (start.getSubProcesses().get(0).type == Types.SELECT && end.getSubProcesses().get(0).type == Types.BRANCH) {
@@ -36,18 +37,18 @@ public class ReductionUtils {
             end.setSubProcesses(communicateChoice(end, (Choice) end.getSubProcesses().get(0), label));
             sn.addStep(new ReductionStep(null, SemanticsRule.CASE, null, sn.getString()));
         }
-        System.out.println(sn.getString());
+//        System.out.println(sn.getString());
         sn = commutativity(sn);
         start = sn.getProcessNodeList().get(0);
         end = sn.getProcessNodeList().get(1);
-        if (start.getSubProcesses().get(0).type == Types.SEND && end.getSubProcesses().get(0).type ==Types.RECEIVE){
+        if (start.getSubProcesses().get(0).type == Types.SEND && end.getSubProcesses().get(0).type == Types.RECEIVE) {
             start.getSubProcesses().remove(0);
             end.getSubProcesses().remove(0);
             sn.addStep(new ReductionStep(null, SemanticsRule.COMM, null, sn.getString()));
-            if(start.getSubProcesses().get(0).type == Types.END || end.getSubProcesses().get(0).type == Types.END)
+            if (start.getSubProcesses().get(0).type == Types.END || end.getSubProcesses().get(0).type == Types.END)
                 sn = inactionCongruence(sn);
         }
-        System.out.println(sn.getString());
+//        System.out.println(sn.getString());
         return sn;
     }
 
@@ -68,17 +69,18 @@ public class ReductionUtils {
         List<ProcessNode> processNodesToCheck = processNodes.subList(1, processNodes.size());
         if (Arrays.asList(Types.SELECT, Types.SEND).contains(starter.getSubProcesses().get(0).type) == false) {
             otherEnd = sn.getCounterpart(starter.getEndpoint());
-        }
-        for (ProcessNode pn : processNodesToCheck) {
-            if (pn.getEndpoint().equals(otherEnd) && pn.getSubProcesses().size() != 0 && pn.getSubProcesses().get(0)
-                    .getString("") != "zero") {
-                processNodes.remove(pn);
-                processNodes.add(0, pn);
-                sn.setProcessNodeList(processNodes);
-                break;
+
+            for (ProcessNode pn : processNodesToCheck) {
+                if (pn.getEndpoint().equals(otherEnd) && pn.getSubProcesses().size() != 0 && pn.getSubProcesses().get(0)
+                        .getString("") != "zero") {
+                    processNodes.remove(pn);
+                    processNodes.add(0, pn);
+                    sn.setProcessNodeList(processNodes);
+                    break;
+                }
             }
+            sn.addStep(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
         }
-        sn.addStep(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
         return sn;
     }
 
@@ -91,16 +93,18 @@ public class ReductionUtils {
                 ScopeNode scopeNode = inactionCongruence(pn.getScopeNode());
                 pn.setScopeNode(scopeNode);
             }
-            if (pn.getSubProcesses().size() == 1 & pn.getSubProcesses().get(0).type == Types.END) {
-                if (i == 0)
-                    prevNode = processNodes.get(1).getName();
-                else
-                    prevNode = processNodes.get(i - 1).getName();
-                processNodes.remove(pn);
-                sn.setProcessNodeList(processNodes);
-                pn = null;
-                sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
-                        SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
+            if (pn.getScopeNode() == null) {
+                if (pn.getSubProcesses().size() == 1 & pn.getSubProcesses().get(0).type == Types.END) {
+                    if (i == 0)
+                        prevNode = processNodes.get(1).getName();
+                    else
+                        prevNode = processNodes.get(i - 1).getName();
+                    processNodes.remove(pn);
+                    sn.setProcessNodeList(processNodes);
+                    pn = null;
+                    sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
+                            SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
+                }
             }
         }
         return sn;
