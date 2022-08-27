@@ -90,6 +90,9 @@ public class ScopeNode {
             if (pn.getScopeNode() == null) {
                 str.append(pn.getString(pn.getEndpoint()));
             }
+            else{
+                str.append(pn.getScopeNode().getString());
+            }
             if(i != processNodes.size()-1)
                 str.append(" | ");
         }

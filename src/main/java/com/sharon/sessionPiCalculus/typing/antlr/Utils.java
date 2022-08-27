@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
 import java.util.stream.Collectors;
+//TODO When sending channels in the example of scope expansion, how will the session type be affected
 //TODO Check duality - in front-end
 // IF TYPE ERROR -  don't do reduction and show errors
 // TODO ONLY single parameter in send and receive - no expressions
@@ -46,7 +47,7 @@ public class Utils {
         allTypingContexts.clear();
         ScopeNode sn = null;
         if (red) {
-             sn = ReductionUtils.semantics(point.sn, processVariableMap);
+            sn = ReductionUtils.semantics(point.sn, processVariableMap);
         }
         processVariableMap.clear();
         return sn.getSteps();
@@ -92,7 +93,7 @@ public class Utils {
                         p.sn = p.currentScopeNode;
                         p.currentScopeNode.setRoot(true);
                     } else {
-                        sessionPiParser.SequentialProcessContext parent = (sessionPiParser.SequentialProcessContext) ((sessionPiParser.ScopeSessionContext)c)
+                        sessionPiParser.SequentialProcessContext parent = (sessionPiParser.SequentialProcessContext) ((sessionPiParser.ScopeSessionContext) c)
                                 .getParent().getParent();
                         List<String> parentChannels = processVariableMap.get(parent.CAPS().getText());
                         putToProcessVariableMap(name, parentChannels);
@@ -199,31 +200,32 @@ public class Utils {
                 if (checkChannel(name, r.VAR()) == false) {
                     res = false;
                     System.out.println("Unrecognised channel");
-                }
-                /* Validating if channel type is send type */
-                if (!(receiveType.getType().equals(Types.RECEIVE))) {
-                    res = false;
-                }
+                } else {
+                    /* Validating if channel type is send type */
+                    if (!(receiveType.getType().equals(Types.RECEIVE))) {
+                        res = false;
+                    }
 
-                /* Validating the parameter */
-                Message m = checkBaseType(receiveType, r.payload(), typingContext, comm);
-                if (!m.isRes())
-                    res = false;
+                    /* Validating the parameter */
+                    Message m = checkBaseType(receiveType, r.payload(), typingContext, comm);
+                    if (!m.isRes())
+                        res = false;
 
-                if (!res) {
-                    String t = m.getReceivedType();
-                    if (m.isAdd())
-                        System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + "?" + t);
-                    else
-                        System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + t);
+                    if (!res) {
+                        String t = m.getReceivedType();
+                        if (m.isAdd())
+                            System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + "?" + t);
+                        else
+                            System.out.println("Error: " + receiveType.getTypeString() + " expected. Got " + t);
 
-                }
-                if (red) {
-                    /* Reduction */
-                    comm = m.getComm();
-                    comm.type = Types.RECEIVE;
-                    p.addCommunicationNode(comm);
-                    /* */
+                    }
+                    if (red) {
+                        /* Reduction */
+                        comm = m.getComm();
+                        comm.type = Types.RECEIVE;
+                        p.addCommunicationNode(comm);
+                        /* */
+                    }
                 }
             }
             break;
@@ -346,7 +348,7 @@ public class Utils {
             }
             break;
         }
-        if(p.currentScopeNode.getProcessNodeList().size() == 2 && p.currentScopeNode.isRoot() == false)
+        if (p.currentScopeNode.getProcessNodeList().size() == 2 && p.currentScopeNode.isRoot() == false)
             p.currentScopeNode = p.currentScopeNode.getParentProcessNode().getParentScopeNode();
         return p;
     }
@@ -421,7 +423,7 @@ public class Utils {
         if (processVariableMap.containsKey(name))
             return processVariableMap.get(name).contains(node.getText());
         else
-            System.out.println("Invalid process name");
+            System.out.println("Channel not identified");
         return false;
     }
 

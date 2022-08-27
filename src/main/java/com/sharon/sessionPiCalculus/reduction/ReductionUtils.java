@@ -17,10 +17,11 @@ public class ReductionUtils {
     /* */
     public static ScopeNode semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
         List<ReductionStep> steps = new ArrayList<>();
+        sn.addStep(new ReductionStep(null, null, null, sn.getString()));
         sn = inactionCongruence(sn);
         sn = scopeExpansion(sn, steps);
 //        System.out.println(sn.getString());
-        while (sn.getProcessNodeList().size() > 1 || sn.isSignalToStop() == false) // Until there is a single inaction left
+        while (sn.getProcessNodeList().size() > 1 && sn.isSignalToStop() == false) // Until there is a single inaction left
             sn = communicate(sn);
         return sn;
     }
@@ -45,9 +46,9 @@ public class ReductionUtils {
             start.getSubProcesses().remove(0);
             end.getSubProcesses().remove(0);
             sn.addStep(new ReductionStep(null, SemanticsRule.COMM, null, sn.getString()));
-            if (start.getSubProcesses().get(0).type == Types.END || end.getSubProcesses().get(0).type == Types.END)
-                sn = inactionCongruence(sn);
         }
+        if (start.getSubProcesses().get(0).type == Types.END || end.getSubProcesses().get(0).type == Types.END)
+            sn = inactionCongruence(sn);
 //        System.out.println(sn.getString());
         return sn;
     }
@@ -118,6 +119,7 @@ public class ReductionUtils {
 
     /* Only one level of scope expansion considered */
     private static ScopeNode scopeExpansion(ScopeNode sn, List<ReductionStep> steps) {
+        String judgement = "";
         List<ProcessNode> processNodes = sn.getProcessNodeList();
         List<ProcessNode> restructureList = new LinkedList<>();
         for (ProcessNode process : processNodes) {
@@ -127,9 +129,7 @@ public class ReductionUtils {
                 List<String> channels = process.getScopeNode().getChannels().get(0).getChannels();
                 process.setUnderCheck(true);
                 if (!ifInFreeVariables(channels, processNodes)) {
-                    String judgement = channels.get(0) + "," + channels.get(1) + " not in fv(" + processNodes.get(0).getName();
-                    sn.addStep(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
-                            SemanticsRule.ScopeExpansion, sn.getString()));
+                    judgement = channels.get(0) + "," + channels.get(1) + " not in fv(" + processNodes.get(0).getName();
                     // channels note in free variables
                     List<Session> presentChannels = sn.getChannels();
                     presentChannels.addAll(process.getScopeNode().getChannels());
@@ -147,6 +147,9 @@ public class ReductionUtils {
                 list.add(pn);
         }
         sn.setProcessNodeList(list);
+        if(judgement != "")
+            sn.addStep(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
+                SemanticsRule.ScopeExpansion, sn.getString()));
         return sn;
     }
 
