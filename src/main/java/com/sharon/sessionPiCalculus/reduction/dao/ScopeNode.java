@@ -12,6 +12,7 @@ public class ScopeNode {
     List<ProcessNode> processNodeList = new LinkedList<>();
     private ProcessNode parentProcessNode;
     private boolean isRoot;
+    private boolean signalToStop;
     List<ReductionStep> steps = new ArrayList<>();
 
     public ScopeNode() {
@@ -21,6 +22,14 @@ public class ScopeNode {
     public ScopeNode(Session channels) {
         this.addChannels(channels);
         this.channelStrings = channels.getChannels();
+    }
+
+    public boolean isSignalToStop() {
+        return signalToStop;
+    }
+
+    public void setSignalToStop(boolean signalToStop) {
+        this.signalToStop = signalToStop;
     }
 
     public boolean isRoot() {

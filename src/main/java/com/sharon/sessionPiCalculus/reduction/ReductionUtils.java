@@ -20,7 +20,7 @@ public class ReductionUtils {
         sn = inactionCongruence(sn);
         sn = scopeExpansion(sn, steps);
 //        System.out.println(sn.getString());
-        while (sn.getProcessNodeList().size() > 1) // Until there is a single inaction left
+        while (sn.getProcessNodeList().size() > 1 || sn.isSignalToStop() == false) // Until there is a single inaction left
             sn = communicate(sn);
         return sn;
     }
@@ -64,6 +64,7 @@ public class ReductionUtils {
 
     private static ScopeNode commutativity(ScopeNode sn) {
         String otherEnd = "";
+        boolean isSignalToStop = true;
         List<ProcessNode> processNodes = sn.getProcessNodeList();
         ProcessNode starter = processNodes.get(0);
         List<ProcessNode> processNodesToCheck = processNodes.subList(1, processNodes.size());
@@ -76,10 +77,15 @@ public class ReductionUtils {
                     processNodes.remove(pn);
                     processNodes.add(0, pn);
                     sn.setProcessNodeList(processNodes);
+                    isSignalToStop = false;
+                    sn.addStep(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
                     break;
                 }
             }
-            sn.addStep(new ReductionStep(null, SemanticsRule.STRUCT, SemanticsRule.Commutativity, sn.getString()));
+            if(isSignalToStop)
+                sn.setSignalToStop(true);
+            else
+                sn.setSignalToStop(false);
         }
         return sn;
     }
@@ -169,9 +175,11 @@ public class ReductionUtils {
                             }
                         }
                     } else {
-                        Communication c = (Communication) p;
-                        if (isFreeVariable(c))
-                            freeVariables.add(c.getName());
+                        if(p.type != Types.END) {
+                            Communication c = (Communication) p;
+                            if (isFreeVariable(c))
+                                freeVariables.add(c.getName());
+                        }
                     }
                     ScopeNode scopeNode = process.getScopeNode();
                     if (scopeNode != null) {
