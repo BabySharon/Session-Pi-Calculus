@@ -13,7 +13,7 @@ import java.util.List;
 public class SessionPiResource {
 
     @POST
-    public String postInputTypeCheck(InputDao input, @QueryParam("red")boolean red) {
+    public List<ReductionStep> postInputTypeCheck(InputDao input, @QueryParam("red")boolean red) {
         List<ReductionStep> tree = null;
         try {
             System.out.println(input.getInput());
@@ -28,7 +28,7 @@ public class SessionPiResource {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "tree";
+        return tree;
     }
 
     }

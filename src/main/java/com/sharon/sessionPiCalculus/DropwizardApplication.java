@@ -32,5 +32,6 @@ public class DropwizardApplication extends Application<AppConfiguration> {
     public void run(AppConfiguration appConfiguration, Environment environment) throws Exception {
         final SessionPiResource resource = new SessionPiResource();
         environment.jersey().register(resource);
+        Cors.insecure(environment);
     }
 }

@@ -7,6 +7,7 @@ public class ReductionStep {
     private SemanticsRule redRule;
     private SemanticsRule ruleDescription;
     private String result;
+    public String inputString;
 
     public ReductionStep(List<String> judgements, SemanticsRule redRule, SemanticsRule ruleDescription, String result) {
         this.judgements = judgements;
@@ -17,5 +18,21 @@ public class ReductionStep {
 
     public String getResult() {
         return result;
+    }
+
+    public List<String> getJudgements() {
+        return judgements;
+    }
+
+    public SemanticsRule getRedRule() {
+        return redRule;
+    }
+
+    public void setJudgements(List<String> judgements) {
+        this.judgements = judgements;
+    }
+
+    public SemanticsRule getRuleDescription() {
+        return ruleDescription;
     }
 }

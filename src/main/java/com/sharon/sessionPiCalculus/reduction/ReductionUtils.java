@@ -17,12 +17,18 @@ public class ReductionUtils {
     /* */
     public static ScopeNode semantics(ScopeNode sn, Map<String, List<String>> processVariableMap) {
         List<ReductionStep> steps = new ArrayList<>();
-        sn.addStep(new ReductionStep(null, null, null, sn.getString()));
+        String inputText = sn.getString();
         sn = inactionCongruence(sn);
         sn = scopeExpansion(sn, steps);
 //        System.out.println(sn.getString());
         while (sn.getProcessNodeList().size() > 1 && sn.isSignalToStop() == false) // Until there is a single inaction left
             sn = communicate(sn);
+        if(sn.getSteps() != null){
+            List<String> judgements = sn.getSteps().get(0).getJudgements();
+            judgements.add(inputText);
+            sn.getSteps().get(0).setJudgements(judgements);
+
+        }
         return sn;
     }
 
