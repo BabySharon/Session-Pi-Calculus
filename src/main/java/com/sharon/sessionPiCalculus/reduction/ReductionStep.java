@@ -28,11 +28,16 @@ public class ReductionStep {
         return redRule;
     }
 
-    public void setJudgements(List<String> judgements) {
-        this.judgements = judgements;
-    }
 
     public SemanticsRule getRuleDescription() {
         return ruleDescription;
+    }
+
+    public void addJudgement(String judgement){
+        judgements.add(judgement);
+    }
+
+    public void setJudgements(List<String> judgements) {
+        this.judgements = judgements;
     }
 }

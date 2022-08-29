@@ -24,8 +24,9 @@ public class ReductionUtils {
         while (sn.getProcessNodeList().size() > 1 && sn.isSignalToStop() == false) // Until there is a single inaction left
             sn = communicate(sn);
         if(sn.getSteps() != null){
-            List<String> judgements = sn.getSteps().get(0).getJudgements();
+            List<String> judgements = new ArrayList<>();
             judgements.add(inputText);
+            judgements.addAll(sn.getSteps().get(0).getJudgements());
             sn.getSteps().get(0).setJudgements(judgements);
 
         }
