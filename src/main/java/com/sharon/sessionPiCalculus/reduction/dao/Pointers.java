@@ -1,5 +1,7 @@
 package com.sharon.sessionPiCalculus.reduction.dao;
 
+import com.sharon.sessionPiCalculus.typing.TypingStep;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +14,7 @@ public class Pointers {
     public ProcessNode currentProcessNode = new ProcessNode();
     public Choice choice = new Choice();
     public List<Communication> commList = new ArrayList<>();
+    public List<TypingStep> ts = new ArrayList<>();
 
     public void addCommunicationNode(Communication comm) {
         if (isChoiceSet == false)

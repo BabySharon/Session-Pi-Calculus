@@ -34,4 +34,11 @@ public class CompositeType extends BasicType{
     public void setSelect(Map<String, List<BasicType>> select) {
         this.select = select;
     }
+
+    public Map<String, List<BasicType>> getComplexPart(){
+        if(branch == null)
+            return select;
+        else
+            return branch;
+    }
 }

@@ -45,13 +45,7 @@ public class ProcessDao {
     }
 
 
-    public String getSessionTypeString() {
-        StringBuilder sb = new StringBuilder("");
-        for (BasicType bt: sessionType) {
-            sb.append(bt.typeString);
-        }
-        return sb.toString();
-    }
+
 
     public List<BasicType> getSessionType(){
         return sessionType;
