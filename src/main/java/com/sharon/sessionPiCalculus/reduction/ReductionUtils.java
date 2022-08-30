@@ -23,10 +23,11 @@ public class ReductionUtils {
 //        System.out.println(sn.getString());
         while (sn.getProcessNodeList().size() > 1 && sn.isSignalToStop() == false) // Until there is a single inaction left
             sn = communicate(sn);
-        if(sn.getSteps() != null){
+        if (sn.getSteps() != null) {
             List<String> judgements = new ArrayList<>();
             judgements.add(inputText);
-            judgements.addAll(sn.getSteps().get(0).getJudgements());
+            if (sn.getSteps().get(0).getJudgements() != null)
+                judgements.addAll(sn.getSteps().get(0).getJudgements());
             sn.getSteps().get(0).setJudgements(judgements);
 
         }
@@ -90,7 +91,7 @@ public class ReductionUtils {
                     break;
                 }
             }
-            if(isSignalToStop)
+            if (isSignalToStop)
                 sn.setSignalToStop(true);
             else
                 sn.setSignalToStop(false);
@@ -100,7 +101,7 @@ public class ReductionUtils {
 
     private static ScopeNode inactionCongruence(ScopeNode sn) {
         List<ProcessNode> processNodes = sn.getProcessNodeList();
-        String prevNode;
+        ProcessNode prevNode;
         for (int i = 0; i < processNodes.size(); i++) {
             ProcessNode pn = processNodes.get(i);
             if (pn.getScopeNode() != null) {
@@ -110,14 +111,18 @@ public class ReductionUtils {
             if (pn.getScopeNode() == null) {
                 if (pn.getSubProcesses().size() == 1 & pn.getSubProcesses().get(0).type == Types.END) {
                     if (i == 0)
-                        prevNode = processNodes.get(1).getName();
+                        prevNode = processNodes.get(1);
                     else
-                        prevNode = processNodes.get(i - 1).getName();
+                        prevNode = processNodes.get(i - 1);
                     processNodes.remove(pn);
                     sn.setProcessNodeList(processNodes);
                     pn = null;
-                    sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
-                            SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
+                    if (prevNode.getSubProcesses().size() == 1 && prevNode.getSubProcesses().get(0).type == Types.END)
+                        sn.addStep(new ReductionStep(Collections.singletonList("zero|zero -> zero"),
+                                SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
+                    else
+                        sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
+                                SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
                 }
             }
         }
@@ -154,9 +159,9 @@ public class ReductionUtils {
                 list.add(pn);
         }
         sn.setProcessNodeList(list);
-        if(judgement != "")
+        if (judgement != "")
             sn.addStep(new ReductionStep(Collections.singletonList(judgement), SemanticsRule.STRUCT,
-                SemanticsRule.ScopeExpansion, sn.getString()));
+                    SemanticsRule.ScopeExpansion, sn.getString()));
         return sn;
     }
 
@@ -185,7 +190,7 @@ public class ReductionUtils {
                             }
                         }
                     } else {
-                        if(p.type != Types.END) {
+                        if (p.type != Types.END) {
                             Communication c = (Communication) p;
                             if (isFreeVariable(c))
                                 freeVariables.add(c.getName());
