@@ -64,7 +64,8 @@ public class ReductionUtils {
     private static List<SubProcess> communicateChoice(ProcessNode pn, Choice c, String label) {
         List<SubProcess> newList = new LinkedList<>();
         List<Communication> commList = c.getProcess().get(label);
-        newList.addAll(commList);
+        if(commList != null)
+            newList.addAll(commList);
         List<SubProcess> subProcesses = pn.getSubProcesses();
         subProcesses.remove(0);
         newList.addAll(subProcesses);
@@ -121,7 +122,7 @@ public class ReductionUtils {
                         sn.addStep(new ReductionStep(Collections.singletonList("zero|zero -> zero"),
                                 SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
                     else
-                        sn.addStep(new ReductionStep(Collections.singletonList(prevNode + "|zero ->" + prevNode),
+                        sn.addStep(new ReductionStep(Collections.singletonList(prevNode.getName() + "|zero ->" + prevNode.getName()),
                                 SemanticsRule.STRUCT, SemanticsRule.Inaction, sn.getString()));
                 }
             }

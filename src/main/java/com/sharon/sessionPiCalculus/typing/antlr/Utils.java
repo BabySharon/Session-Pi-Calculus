@@ -1,5 +1,6 @@
 package com.sharon.sessionPiCalculus.typing.antlr;
 
+import com.sharon.sessionPiCalculus.CustomException;
 import com.sharon.sessionPiCalculus.InputDao;
 import com.sharon.sessionPiCalculus.Wrapper;
 import com.sharon.sessionPiCalculus.reduction.ReductionUtils;
@@ -35,7 +36,7 @@ public class Utils {
     public static Map<String, List<String>> processVariableMap = new HashMap<>();
     public static boolean error = false;
 
-    public static Wrapper createVisitor(String input, InputDao inputDao, String name, boolean red) throws Exception {
+    public static Wrapper createVisitor(String input, InputDao inputDao, String name) throws Exception {
         ANTLRInputStream inputStream = new ANTLRInputStream(input);
         sessionPiLexer lexer = new sessionPiLexer(inputStream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -46,26 +47,44 @@ public class Utils {
         allSessionTypes = inputDao.getAllSessionTypes();
         TypingStep ts = null;
         Pointers point = null;
+        boolean flag = true;
         Wrapper w = new Wrapper();
         try {
-             point = typeCheckManager(tree, null, new Pointers(), red);
-        }catch (Exception e) {
-            w.ts = point.ts;
+             point = typeCheckManager(tree, null, new Pointers(), inputDao.isRed());
+             w.ts = point.ts;
+        }catch (CustomException e) {
+            w.ts = e.p.ts;
+            flag = false;
         }
         allSessionTypes.clear();
         allTypingContexts.clear();
         ScopeNode sn = null;
-        if (red) {
-            sn = ReductionUtils.semantics(point.sn, processVariableMap);
+        if (inputDao.isRed()) {
+            if(flag) {
+                sn = ReductionUtils.semantics(point.sn, processVariableMap);
+                w.steps = sn.getSteps();
+            }
+            else
+                w.steps = new ArrayList<>();
         }
         processVariableMap.clear();
-        w.steps = sn.getSteps();
         return w;
     }
 
 
     public static String stringSessionType(String processName) {
+        StringBuilder str = new StringBuilder("");
         List<BasicType> sessionType = allSessionTypes.get(processName);
+        if(sessionType != null) {
+            for (BasicType bt : sessionType) {
+                if (bt != null)
+                    str.append(bt.getTypeString());
+            }
+        }
+        return str.toString();
+    }
+
+    public static String sessionString(List<BasicType> sessionType){
         StringBuilder str = new StringBuilder("");
         for (BasicType bt : sessionType) {
             str.append(bt.getTypeString());
@@ -112,26 +131,31 @@ public class Utils {
 
                 case "ScopeSessionContext": {
                     ts.setRule("T-Res");
+                    ts.setText("");
                     System.out.println("Rule: RuleT-Res");
+                    sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
+                    List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
+                    Map<String, String> newMap = new HashMap<>();
+                    String process1 = processNameFromChannel(channels.get(0));
+                    String process2 = processNameFromChannel(channels.get(1));
+                    newMap.put(process1, stringSessionType(process1));
+                    newMap.put(process2, stringSessionType(process2));
+                    ts.setTypingContexts(newMap);
+                    if(allSessionTypes.get(process1) != null &&  allSessionTypes.get(process2)!=null) {
+                        error = isDual(allSessionTypes.get(process1), allSessionTypes.get(process2));
+                        p.ts.add(ts);
+                        if (!error)
+                            ts.setErrorMessage("Not dual types or input-type mismatch");
+                    }
                     if (red) {
                         /* For Reduction */
-                        sessionPiParser.ScopeSessionContext ssc = ((sessionPiParser.ScopeSessionContext) c);
-                        List<String> channels = ssc.VAR().stream().map(s -> s.getText()).collect(Collectors.toList());
+
                         if (p.currentScopeNode == null) {
                             p.currentScopeNode = new ScopeNode(new Session(channels.get(0), channels.get(1)));
                             ts.setText("new ".concat(channels.get(0)) + " " + channels.get(1));
                             p.sn = p.currentScopeNode;
                             p.currentScopeNode.setRoot(true);
-                            Map<String, String> newMap = new HashMap<>();
-                            String process1 = processNameFromChannel(channels.get(0));
-                            String process2 = processNameFromChannel(channels.get(1));
-                            newMap.put(process1, stringSessionType(process1));
-                            newMap.put(process2, stringSessionType(process2));
-                            ts.setTypingContexts(newMap);
-                            error = isDual(allSessionTypes.get(process1), allSessionTypes.get(process2));
-                            p.ts.add(ts);
-                            if (!error)
-                                ts.setErrorMessage("Not dual types");
+
 
                         } else {
                             sessionPiParser.SequentialProcessContext parent = (sessionPiParser.SequentialProcessContext) ((sessionPiParser.ScopeSessionContext) c)
@@ -145,17 +169,7 @@ public class Utils {
                             newNode.setParentProcessNode(p.currentProcessNode);
                             p.currentScopeNode = newNode;
                             p.currentScopeNode.setRoot(false);
-                            ts.setText("new ".concat(channels.get(0)) + " " + channels.get(1));
-                            Map<String, String> newMap = new HashMap<>();
-                            String process1 = processNameFromChannel(channels.get(0));
-                            String process2 = processNameFromChannel(channels.get(1));
-                            newMap.put(process1, stringSessionType(process1));
-                            newMap.put(process2, stringSessionType(process2));
-                            ts.setTypingContexts(newMap);
-                            error = isDual(allSessionTypes.get(process1), allSessionTypes.get(process2));
-                            p.ts.add(ts);
-                            if (!error)
-                               ts.setErrorMessage("Not dual types");
+
 
                         }
                     }
@@ -175,8 +189,8 @@ public class Utils {
                     List<String> processNames = ((sessionPiParser.ParallelContext)c).process().stream().map(elem ->
                             ((sessionPiParser.SequentialProcessContext)elem).CAPS().getText()).collect(Collectors.toList());
                     ts.setText(processNames.get(0)+" | "+processNames.get(1));
-                    ts = setAllTypingContext(processNames.get(0), ts);
-                    ts = setAllTypingContext(processNames.get(1), ts);
+//                    ts = setAllTypingContext(processNames.get(0), ts);
+//                    ts = setAllTypingContext(processNames.get(1), ts);
                     p.ts.add(ts);
                     iterateChildren(c, null, p, red);
                 }
@@ -198,7 +212,7 @@ public class Utils {
 
                 case "SendProcessContext": {
                     ts.setRule("T-Out");
-                    ts.setText("Send in" + name);
+                    ts.setText(name);
                     Communication comm = new Communication();
                     boolean res = true;
                     StringBuilder str = new StringBuilder("");
@@ -207,6 +221,7 @@ public class Utils {
                     Map<String, String> typingContext = allTypingContexts.get(name);
                     List<BasicType> sessionType = allSessionTypes.get(name);
                     System.out.println("Rule: T-Out   Process: " + name);
+                    ts.addTypingContext(processVariableMap.get(name).get(0), sessionString(sessionType));
                     if (!sessionType.isEmpty()) {
                         sendType = sessionType.remove(0);
                     }
@@ -244,7 +259,7 @@ public class Utils {
                         p.addCommunicationNode(comm);
                         /* */
                     }
-                    ts = setAllTypingContext(name, ts);
+//                    ts = setAllTypingContext(name, ts);
                     ts.setErrorMessage(str.toString());
                     p.ts.add(ts);
                 }
@@ -252,7 +267,7 @@ public class Utils {
 
                 case "ReceiveProcessContext": {
                     ts.setRule("T-In");
-                    ts.setText("Receive in" + name);
+                    ts.setText(name);
                     StringBuilder str = new StringBuilder("");
                     Communication comm = new Communication();
                     boolean res = true;
@@ -261,6 +276,7 @@ public class Utils {
                     Map<String, String> typingContext = allTypingContexts.get(name);
                     List<BasicType> sessionType = allSessionTypes.get(name);
                     System.out.println("Rule: T-In \t  Process: " + name);
+                    ts.addTypingContext(processVariableMap.get(name).get(0), sessionString(sessionType));
                     if (!sessionType.isEmpty()) {
                         receiveType = sessionType.remove(0);
                     }
@@ -300,20 +316,21 @@ public class Utils {
                             /* */
                         }
                     }
-                    ts = setAllTypingContext(name, ts);
+//                    ts = setAllTypingContext(name, ts);
                     ts.setErrorMessage(str.toString());
                     p.ts.add(ts);                }
                 break;
 
                 case "SelectProcessContext": {
                     ts.setRule("T-Sel");
-                    ts.setText("Select in" + name);
+                    ts.setText(name);
                     BasicType st = null;
                     System.out.println("Rule: T-Select \t  Process: " + name);
                     sessionPiParser.SelectProcessContext spc = (sessionPiParser.SelectProcessContext) c;
                     boolean res = true;
                     StringBuilder errorMessage = new StringBuilder("");
                     List<BasicType> sessionType = allSessionTypes.get(name);
+                    ts.addTypingContext(processVariableMap.get(name).get(0), stringSessionType(name));
                     st = sessionType.remove(0);
                     Map<String, List<BasicType>> selectMap = ((CompositeType) st).getSelect();
                     if (checkChannel(name, spc.VAR()) == false) {
@@ -346,6 +363,7 @@ public class Utils {
                     }
 
                     allSessionTypes.put(name, selectMap.get(label));
+                    p.ts.add(ts);
                     p = iterateChildren(spc, name, p, red);
                     allSessionTypes.put(name, sessionType);
 
@@ -356,14 +374,13 @@ public class Utils {
                         p.commList.clear();
                         /* */
                     }
-                    ts.addTypingContext(processVariableMap.get(name).get(0), stringSessionType(name));
-                    p.ts.add(ts);
+
                 }
                 break;
 
                 case "BranchProcessContext": {
                     ts.setRule("T-Branch");
-                    ts.setText("Branch in" + name);
+                    ts.setText(name);
                     BasicType bt = null;
                     System.out.println("Rule: T-Branch \t  Process: " + name);
                     boolean res = true;
@@ -376,6 +393,7 @@ public class Utils {
                     List<sessionPiParser.BranchContext> bc = new ArrayList<>();
                     int labelCount = 0;
                     List<BasicType> sessionType = allSessionTypes.get(name);
+                    ts.addTypingContext(processVariableMap.get(name).get(0), stringSessionType(name));
                     bt = sessionType.remove(0);
                     Map<String, List<BasicType>> branchMap = ((CompositeType) bt).getBranch();
                     /* Validate
@@ -404,6 +422,7 @@ public class Utils {
                         p.choice.type = Types.BRANCH;
                         p.isChoiceSet = true;
                     }
+                    p.ts.add(ts);
 
                     for (sessionPiParser.BranchContext pb : bc) {
                         if (!sessionType.isEmpty()) {
@@ -424,8 +443,7 @@ public class Utils {
                         p.isChoiceSet = false;
                         /* */
                     }
-                    ts.addTypingContext(processVariableMap.get(name).get(0), stringSessionType(name));
-                    p.ts.add(ts);
+
                 }
                 break;
 
@@ -439,22 +457,27 @@ public class Utils {
             }
             if (!error) {
                 error = true;
-                throw new Exception("Type Error");
+                throw new CustomException(p);
             }
-
-            if (p.currentScopeNode.getProcessNodeList().size() == 2 && p.currentScopeNode.isRoot() == false)
-                p.currentScopeNode = p.currentScopeNode.getParentProcessNode().getParentScopeNode();
+            if(red) {
+                if (p.currentScopeNode.getProcessNodeList().size() == 2 && p.currentScopeNode.isRoot() == false)
+                    p.currentScopeNode = p.currentScopeNode.getParentProcessNode().getParentScopeNode();
+            }
 
             return p;
 
     }
 
+    private void setPointer(Pointers p){
+
+    }
+
     private static TypingStep setAllTypingContext(String s, TypingStep ts) {
         ts.addTypingContext(processVariableMap.get(s).get(0), stringSessionType(s));
-        Map<String, String> variables = allTypingContexts.get(s);
-        for (String k: variables.keySet()) {
-            ts.addTypingContext(k, variables.get(k));
-        }
+//        Map<String, String> variables = allTypingContexts.get(s);
+//        for (String k: variables.keySet()) {
+//            ts.addTypingContext(k, variables.get(k));
+//        }
         return ts;
     }
 

@@ -20,10 +20,11 @@ public class SessionPiResource {
 //            System.out.println(input.getInput());
 //            System.out.println(input.getProcessList().get(0).getTypingContextList().get("y"));
 //            InputDao.sessionVariableObjects = input.getSessionVariables();
-            result = Utils.createVisitor(input.getInput(), input, null, red);
-            for (ReductionStep step : result.getSteps()) {
-                System.out.println(step.getResult());
-            }
+            result = Utils.createVisitor(input.getInput(), input, null);
+            if(input.isRed())
+                for (ReductionStep step : result.getSteps()) {
+                    System.out.println(step.getResult());
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }

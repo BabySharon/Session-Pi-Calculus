@@ -12,6 +12,16 @@ import java.util.Map;
 public class InputDao {
     private String input;
     List<ProcessDao> processList;
+    boolean red;
+
+    @JsonProperty
+    public boolean isRed() {
+        return red;
+    }
+
+    public void setRed(boolean red) {
+        this.red = red;
+    }
 
     public InputDao(String input, List<ProcessDao> processList) throws JsonProcessingException {
         this.input = input;
